@@ -1,27 +1,37 @@
 package com.alesegdia.demux;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.alesegdia.demux.assets.Tmx;
+import com.alesegdia.demux.screen.GameScreen;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class GdxGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+public class GdxGame extends Game {
+	public SpriteBatch batch;
+	public OrthographicCamera cam;
 	
+	public GameScreen gameScreen;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        cam = new OrthographicCamera(12, 12 * (h / w));
+        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+        cam.update();
+
+        Tmx.Initialize();
+        
+        gameScreen = new GameScreen(this);
+        setScreen(gameScreen);
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		super.render();
 	}
+
 }
