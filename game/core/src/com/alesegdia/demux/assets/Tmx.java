@@ -6,14 +6,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class Tmx {
 
-	public static TiledMap sampleMap;
-	public static OrthogonalTiledMapRenderer sampleMapRenderer;
-	
+	public static TilemapWrapper sampleMap;
+
 	public static void Initialize()
 	{
-		sampleMap = new TmxMapLoader().load("untitled.tmx");
-		float unitScale = 1.f / 16.f;
-		sampleMapRenderer = new OrthogonalTiledMapRenderer(sampleMap, unitScale);
+		sampleMap = new TilemapWrapper("untitled.tmx");
 	}
 	
 }

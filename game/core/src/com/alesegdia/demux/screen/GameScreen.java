@@ -36,8 +36,7 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		Tmx.sampleMapRenderer.setView(g.cam);
-		Tmx.sampleMapRenderer.render();
+		Tmx.sampleMap.render(g.cam);
 	}
 
 	private void handleInput() {
