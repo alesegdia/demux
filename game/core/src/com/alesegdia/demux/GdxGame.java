@@ -1,7 +1,11 @@
 package com.alesegdia.demux;
 
 import com.alesegdia.demux.assets.Tmx;
+import com.alesegdia.demux.assets.TmxRoomInfoLoader;
 import com.alesegdia.demux.screen.GameScreen;
+import com.alesegdia.troidgen.ManualRoomProvider;
+import com.alesegdia.troidgen.room.Room;
+import com.alesegdia.troidgen.room.RoomInfo;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,6 +28,11 @@ public class GdxGame extends Game {
         cam.update();
 
         Tmx.Initialize();
+        
+        new TmxRoomInfoLoader().load(Tmx.someLinks.tilemap);
+        
+        ManualRoomProvider mrp = new ManualRoomProvider();
+        mrp.addGeometryModel(Tmx.someLinks.createRoom());
         
         gameScreen = new GameScreen(this);
         setScreen(gameScreen);
