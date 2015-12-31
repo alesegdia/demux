@@ -29,10 +29,8 @@ public class GdxGame extends Game {
 
         Tmx.Initialize();
         
-        new TmxRoomInfoLoader().load(Tmx.someLinks.tilemap);
-        
         ManualRoomProvider mrp = new ManualRoomProvider();
-        mrp.addGeometryModel(Tmx.someLinks.createRoom());
+        mrp.addGeometryModel(Tmx.GetMap("tpl_common").createRoom());
         
         gameScreen = new GameScreen(this);
         setScreen(gameScreen);
