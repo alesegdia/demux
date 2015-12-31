@@ -1,9 +1,12 @@
 package com.alesegdia.demux.assets;
 
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import com.alesegdia.troidgen.room.Room;
+import com.alesegdia.troidgen.room.RoomType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -23,6 +26,22 @@ public class Tmx {
 				mapHash.put(entry.nameWithoutExtension(), new TilemapWrapper(entry.path()));
 			}
 		}
+	}
+	
+	public static List<Room> GetRoomsOfType( RoomType rtype )
+	{
+		List<Room> lr = new LinkedList<Room>();
+		for( TilemapWrapper tmw : mapHash.values() )
+		{
+			Room r = tmw.createRoom();
+			System.out.println(r.rtype);
+			if( r.rtype == rtype )
+			{
+				System.out.println("MEH!");
+				lr.add(r);
+			}
+		}
+		return lr;
 	}
 
 	public static TilemapWrapper GetMap(String string) {
