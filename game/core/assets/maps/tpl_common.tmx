@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="12" tileheight="12" nextobjectid="1">
  <properties>
-  <property name="link" value=""/>
+  <property name="constraint" value="1000"/>
+  <property name="links" value="1-1-TL 2-1-TR 1-2-LB 2-2-RB"/>
+  <property name="size" value="2x2"/>
+  <property name="type" value="common"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="12" tileheight="12" tilecount="6">
   <image source="tiles.png" width="72" height="12"/>
-  <tile id="0">
-   <properties>
-    <property name="constraint" value="true"/>
-    <property name="links" value="all"/>
-   </properties>
-  </tile>
   <tile id="2">
    <properties>
     <property name="link" value="top"/>
