@@ -18,7 +18,6 @@ public class TilemapWrapper {
 		tilemap = new TmxMapLoader().load(path);
 		float unitScale = 1.f / 16.f;
 		renderer = new OrthogonalTiledMapRenderer(tilemap, unitScale);
-		
 		rinfo = new TmxRoomInfoLoader().load(tilemap);
 	}
 
@@ -28,7 +27,7 @@ public class TilemapWrapper {
 	}
 
 	public Room createRoom() {
-		return Room.CreateFromInfo(this.rinfo);
+		return new Room(this.rinfo);
 	}
 	
 }
