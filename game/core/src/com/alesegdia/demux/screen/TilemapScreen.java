@@ -1,16 +1,23 @@
 package com.alesegdia.demux.screen;
 
+import com.alesegdia.demux.GameConfig;
+import com.alesegdia.demux.GameWorld;
 import com.alesegdia.demux.GdxGame;
 import com.alesegdia.demux.assets.TilemapWrapper;
+import com.alesegdia.demux.physics.MapBodyBuilder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 
 public class TilemapScreen implements Screen {
 
 	private GdxGame g;
 	private TilemapWrapper currentMap;
+	private GameWorld gw;
 
 	public TilemapScreen( GdxGame g, TilemapWrapper startMap )
 	{
@@ -20,15 +27,26 @@ public class TilemapScreen implements Screen {
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+		gw = new GameWorld(g.physics, g.batch, g.cam);
+		gw.makePlayer(200, 40);
+		Array<Body> bodies = MapBodyBuilder.buildShapes(this.currentMap.tilemap, GameConfig.METERS_TO_PIXELS, g.physics.world());
+		for( Body b : bodies )
+		{
+			
+		}
 	}
 
 	@Override
 	public void render(float delta)
 	{	
-		handleInput(delta);
 		
+		g.cam.position.x = gw.playerPositionComponent.position.x;
+		g.cam.position.y = gw.playerPositionComponent.position.y;
+
+		gw.step();
+		g.physics.step(delta);
+
+		gw.setCam();
         g.cam.update();
         g.batch.setProjectionMatrix(g.cam.combined);
         
@@ -36,13 +54,13 @@ public class TilemapScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		currentMap.render(g.cam);
-	}
-
-	private void handleInput( float delta ) {
-		if( Gdx.input.isKeyPressed(Input.Keys.A) ) g.cam.position.x -= delta;
-		if( Gdx.input.isKeyPressed(Input.Keys.D) ) g.cam.position.x += delta;
-		if( Gdx.input.isKeyPressed(Input.Keys.S) ) g.cam.position.y -= delta;
-		if( Gdx.input.isKeyPressed(Input.Keys.W) ) g.cam.position.y += delta;
+		
+		
+		g.batch.begin();
+		gw.render();
+		g.batch.end();
+		
+		g.physics.render(g.cam);
 	}
 
 	@Override
