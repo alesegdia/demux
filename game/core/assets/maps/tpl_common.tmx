@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="12" tileheight="12" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="8" tileheight="8" nextobjectid="1">
  <properties>
   <property name="constraint" value="0000"/>
-  <property name="links" value="1-1-TL 2-1-TR 1-2-LB 2-2-RB"/>
+  <property name="links" value="0-0-TL 1-0-TR 0-1-LB 1-1-RB"/>
   <property name="size" value="2x2"/>
   <property name="type" value="common"/>
  </properties>
- <tileset firstgid="1" name="tiles" tilewidth="12" tileheight="12" tilecount="7">
-  <image source="tiles.png" width="84" height="12"/>
+ <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="10">
+  <image source="tiles.png" width="54" height="8"/>
   <tile id="2">
    <properties>
     <property name="link" value="top"/>
