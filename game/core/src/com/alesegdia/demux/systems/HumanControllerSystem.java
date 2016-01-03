@@ -47,39 +47,42 @@ public class HumanControllerSystem extends EntitySystem {
 		
 		int dx = 0; int dy = 0;
 		float prevYlinear = phc.body.getLinearVelocity().y;
-		float prevXlinear = phc.body.getLinearVelocity().x;
+		
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			dx = -1;
 		} else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			dx = 1;
 		}
 
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+		
+		if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
+		{
+			if( !phc.grounded )
+			{
+				plc.jumping = false;
+			}
+		}
+		else if(Gdx.input.isKeyPressed(Input.Keys.UP))
+		{
 			dy = 1;
 		}
 		
-		float x, y;
-		TransformComponent posc = (TransformComponent) e.getComponent(TransformComponent.class);
-		x = posc.position.x;
-		y = posc.position.y;
-		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			if( phc.grounded ) {
-
+			if( true ) { //phc.grounded ) {
 				plc.jumping = true;
 				lvc.doCap[1] = false;
 				prevYlinear = 6;
 
-			} else {
-				plc.jumping = false;
-				lvc.doCap[1] = true;
-				prevYlinear = 6;
 			}
 		}
 		
 		if( plc.jumping ) {
 			lvc.doCap[1] = false;
 		}
+
+		lvc.linearVelocity.x = dx * 5 * lvc.speed.x;
+		lvc.linearVelocity.y = prevYlinear;
+		phc.body.setGravityScale(1);
 		
 		plc.isPressingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
 		
@@ -87,8 +90,6 @@ public class HumanControllerSystem extends EntitySystem {
 
 	@Override
 	public void notifyEntityRemoved(Entity e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }
