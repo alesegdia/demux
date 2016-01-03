@@ -102,10 +102,6 @@ public class Physics {
 		return b;
 	}
 	
-	public Body createEnemyBody(float x, float y) {
-		return createCircleBody(x, y, 10, CollisionLayers.CATEGORY_ENEMYPHYSIC, CollisionLayers.MASK_ENEMYPHYSIC, CollisionLayers.GROUP_ENEMYPHYSIC, true);
-	}
-
 	public Body createPlayerBody(float x, float y) {
 		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS, true);
 		//CircleShape cs = new CircleShape();
@@ -119,72 +115,6 @@ public class Physics {
 
 	}
 	
-	public Body createBulletBody( float x, float y, float w, float h, short cat, short mask, short group ) {
-		return createDirectionalBullet(x,y,w,h,0,cat,mask,group);
-	}
-	
-	public Body createDirectionalBullet( float x, float y, float w, float h, float angle, short cat, short mask, short group ) {
-		Body b = createBody(x, y, true);
-		b.setBullet(true);
-		CircleShape cs = new CircleShape();
-		cs.setRadius(w * GameConfig.PIXELS_TO_METERS);
-		/*
-		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS);
-		*/
-		createFixture(b, cs, cat, mask, group, 0, 0, 0, true);
-		b.setGravityScale(0);
-		cs.dispose();
-		return b;
-	}
-	
-	public Body createPlayerBulletBody( float x, float y ) {
-		return createBulletBody(x, y, 5, 5, CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.MASK_PLBULLETS, CollisionLayers.GROUP_PLBULLETS);
-	}
-
-	public Body createGroundExplosionBody( float x, float y ) {
-		Body b = createBody(x, y, true);
-		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(5 * GameConfig.PIXELS_TO_METERS, 5 * GameConfig.PIXELS_TO_METERS);
-		createFixture(b, ps, CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.MASK_PLBULLETS, CollisionLayers.MASK_PLBULLETS, 0, 0, 0, true);
-		b.setGravityScale(0);
-		ps.dispose();
-		return b;
-	}
-	
-	public Body createEnemyBody2( float x, float y, float w, float h ) {
-		Body b = createBody(x, y, true);
-		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS);
-		createFixture(b, ps, CollisionLayers.CATEGORY_ENEMYPHYSIC, CollisionLayers.MASK_ENEMYPHYSIC, CollisionLayers.GROUP_ENEMYPHYSIC, 1f, 0, 0, false);
-		createFixture(b, ps, CollisionLayers.CATEGORY_ENEMYLOGIC, CollisionLayers.MASK_ENEMYLOGIC, CollisionLayers.GROUP_ENEMYPHYSIC, 0.01f, 0, 0, true);
-		ps.dispose();
-		return b;
-	}
-
-	public Body createPickupBody(float x, float y, float s) {
-		Body b = createBody(x, y, true);
-		b.setGravityScale(0);
-		CircleShape cs = new CircleShape();
-		cs.setRadius(s * GameConfig.PIXELS_TO_METERS);
-		createFixture(b, cs, CollisionLayers.CATEGORY_PICKUP, CollisionLayers.MASK_PICKUP, CollisionLayers.GROUP_PICKUP, 0, 0, 0, true);
-		return b;
-	}
-
-	public Body createShopBody(float x, float y, float w, float h) {
-		Body b = createRectBody(x, y, w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS,
-				CollisionLayers.CATEGORY_SHOP, CollisionLayers.MASK_SHOP, CollisionLayers.GROUP_SHOP, false, true);
-		b.setGravityScale(0);
-		return b;
-	}
-
-	public Body createPortalBody(float x, float y, int w, int h) {
-		Body b = createRectBody(x, y, w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS,
-				CollisionLayers.CATEGORY_PORTAL, CollisionLayers.MASK_PORTAL, CollisionLayers.GROUP_PORTAL, false, true);
-		b.setGravityScale(0);
-		return b;
-	}
-
 	public void Dispose() {
 		Array<Body> bodies = new Array<Body>();
 		this.world.getBodies(bodies);
