@@ -5,6 +5,7 @@ import java.util.List;
 import com.alesegdia.demux.assets.Tmx;
 import com.alesegdia.demux.assets.TmxRoomInfoLoader;
 import com.alesegdia.demux.screen.GameScreen;
+import com.alesegdia.demux.screen.TilemapScreen;
 import com.alesegdia.troidgen.GraphBuilder;
 import com.alesegdia.troidgen.IRoomProvider;
 import com.alesegdia.troidgen.LayoutBuilder;
@@ -31,6 +32,7 @@ public class GdxGame extends Game {
 	public OrthographicCamera cam;
 	
 	public GameScreen gameScreen;
+	public TilemapScreen tilemapScreen;
 
 	@Override
 	public void create () {
@@ -49,7 +51,7 @@ public class GdxGame extends Game {
         
 		LayoutBuilder lb = new LayoutBuilder();
 		LayoutBuilderConfig lbc = new LayoutBuilderConfig();
-		lbc.spawnRect = new Rect(-10, -10, 20, 20);
+		lbc.spawnRect = new Rect(-30, -30, 30, 30);
 		lbc.numIterations = 20;
 		
 		OverlapSolverConfig osc = new OverlapSolverConfig();
@@ -61,7 +63,7 @@ public class GdxGame extends Game {
 		lbc.osc = osc;
 		lbc.spawnRect = new Rect(-8, -8, 16, 16);
 		
-		MinSizeRoomGroupValidator msrge = new MinSizeRoomGroupValidator( 20 );
+		MinSizeRoomGroupValidator msrge = new MinSizeRoomGroupValidator( 6 );
 
 		RestrictionSet rs = new RestrictionSet(4, true, true, true, true);
 		List<Room> result = lb.generate(lbc, mrp, msrge, rs);
@@ -77,9 +79,9 @@ public class GdxGame extends Game {
 		RectDebugger rd = new RectDebugger(result, 800, 600, osc.enclosingRect);
 		rd.Show();
 
-        
         gameScreen = new GameScreen(this);
-        setScreen(gameScreen);
+        tilemapScreen = new TilemapScreen(this, Tmx.GetMap("common_2x1"));
+        setScreen(tilemapScreen);
 	}
 
 	@Override
