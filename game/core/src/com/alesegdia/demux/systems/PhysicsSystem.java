@@ -47,7 +47,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			public void startCollision(Contact c, Body player, Body map, Vector2 normal) {
 				Entity e = (Entity) player.getUserData();
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
-				if( normal.y == 1 ) {
+				if( normal.y == -1 ) {
 					PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 					
 					plc.jumping = false;
