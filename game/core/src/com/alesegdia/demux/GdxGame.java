@@ -2,8 +2,10 @@ package com.alesegdia.demux;
 
 import java.util.List;
 
+import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.Tmx;
 import com.alesegdia.demux.assets.TmxRoomInfoLoader;
+import com.alesegdia.demux.physics.Physics;
 import com.alesegdia.demux.screen.GameScreen;
 import com.alesegdia.demux.screen.TilemapScreen;
 import com.alesegdia.troidgen.GraphBuilder;
@@ -33,6 +35,7 @@ public class GdxGame extends Game {
 	
 	public GameScreen gameScreen;
 	public TilemapScreen tilemapScreen;
+	public Physics physics;
 
 	@Override
 	public void create () {
@@ -41,10 +44,12 @@ public class GdxGame extends Game {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         cam = new OrthographicCamera(12, 12 * (h / w));
+        cam.setToOrtho(false, GameConfig.VIEWPORT_WIDTH, GameConfig.VIEWPORT_HEIGHT);
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
 
         Tmx.Initialize();
+        Gfx.Initialize();
         
         ManualRoomProvider mrp = new ManualRoomProvider();
         mrp.addAll(Tmx.GetRoomsOfType(RoomType.COMMON));
@@ -78,6 +83,8 @@ public class GdxGame extends Game {
 
 		RectDebugger rd = new RectDebugger(result, 800, 600, osc.enclosingRect);
 		rd.Show();
+		
+		physics = new Physics();
 
         gameScreen = new GameScreen(this);
         tilemapScreen = new TilemapScreen(this, Tmx.GetMap("common_2x1"));
