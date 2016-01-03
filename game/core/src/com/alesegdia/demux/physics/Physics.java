@@ -25,7 +25,6 @@ public class Physics {
 	private static final int VELOCITY_ITERATIONS = 6;
 	private static final int POSITION_ITERATIONS = 2;
 	
-	
 	public PhysicsSystem physicsSystem;
 	
 	public Physics() {
@@ -121,6 +120,10 @@ public class Physics {
 		for( Body b : bodies ) {
 			b.getWorld().destroyBody(b);
 		}
+	}
+
+	public World world() {
+		return this.world;
 	}
 
 
