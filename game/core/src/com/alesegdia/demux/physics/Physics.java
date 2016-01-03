@@ -108,8 +108,10 @@ public class Physics {
 
 	public Body createPlayerBody(float x, float y) {
 		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS, true);
-		CircleShape cs = new CircleShape();
-		cs.setRadius(7.41f * GameConfig.PIXELS_TO_METERS);
+		//CircleShape cs = new CircleShape();
+		//cs.setRadius(7.41f * GameConfig.PIXELS_TO_METERS);
+		PolygonShape cs = new PolygonShape();
+		cs.setAsBox(0.14f, 0.3f);
 		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
 		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERLOGIC, CollisionLayers.MASK_PLAYERLOGIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
 		cs.dispose();
