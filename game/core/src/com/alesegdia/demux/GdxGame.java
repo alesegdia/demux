@@ -6,8 +6,8 @@ import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.Tmx;
 import com.alesegdia.demux.assets.TmxRoomInfoLoader;
 import com.alesegdia.demux.physics.Physics;
-import com.alesegdia.demux.screen.GameScreen;
-import com.alesegdia.demux.screen.TilemapScreen;
+import com.alesegdia.demux.screen.SelectMapScreen;
+import com.alesegdia.demux.screen.GameplayScreen;
 import com.alesegdia.troidgen.GraphBuilder;
 import com.alesegdia.troidgen.IRoomProvider;
 import com.alesegdia.troidgen.LayoutBuilder;
@@ -33,8 +33,8 @@ public class GdxGame extends Game {
 	public SpriteBatch batch;
 	public OrthographicCamera cam;
 	
-	public GameScreen gameScreen;
-	public TilemapScreen tilemapScreen;
+	public SelectMapScreen gameScreen;
+	public GameplayScreen tilemapScreen;
 	public Physics physics;
 
 	@Override
@@ -86,8 +86,8 @@ public class GdxGame extends Game {
 		
 		physics = new Physics();
 
-        gameScreen = new GameScreen(this);
-        tilemapScreen = new TilemapScreen(this, Tmx.GetMap("common_2x1"));
+        gameScreen = new SelectMapScreen(this);
+        tilemapScreen = new GameplayScreen(this, Tmx.GetMap("common_2x1"));
         setScreen(tilemapScreen);
 	}
 
