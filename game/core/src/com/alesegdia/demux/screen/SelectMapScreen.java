@@ -10,13 +10,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-public class GameScreen implements Screen {
+public class SelectMapScreen implements Screen {
 
 	TiledMap tm;	
 	OrthogonalTiledMapRenderer mapRend;
 	private GdxGame g;
 	
-	public GameScreen( GdxGame g )
+	public SelectMapScreen( GdxGame g )
 	{
 		this.g = g;
 	}
