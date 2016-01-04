@@ -13,13 +13,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
-public class TilemapScreen implements Screen {
+public class GameplayScreen implements Screen {
 
 	private GdxGame g;
 	private TilemapWrapper currentMap;
 	private GameWorld gw;
 
-	public TilemapScreen( GdxGame g, TilemapWrapper startMap )
+	public GameplayScreen( GdxGame g, TilemapWrapper startMap )
 	{
 		this.g = g;
 		this.currentMap = startMap;
@@ -30,19 +30,13 @@ public class TilemapScreen implements Screen {
 		gw = new GameWorld(g.physics, g.batch, g.cam);
 		gw.makePlayer(200, 40);
 		Array<Body> bodies = MapBodyBuilder.buildShapes(this.currentMap.tilemap, GameConfig.METERS_TO_PIXELS, g.physics.world());
-		for( Body b : bodies )
-		{
-			
-		}
+		gw.buildMapEntities(currentMap);
 	}
 
 	@Override
 	public void render(float delta)
 	{	
 		
-		g.cam.position.x = gw.playerPositionComponent.position.x;
-		g.cam.position.y = gw.playerPositionComponent.position.y;
-
 		gw.step();
 		g.physics.step(delta);
 
@@ -60,7 +54,7 @@ public class TilemapScreen implements Screen {
 		gw.render();
 		g.batch.end();
 		
-		g.physics.render(g.cam);
+		//g.physics.render(g.cam);
 	}
 
 	@Override
