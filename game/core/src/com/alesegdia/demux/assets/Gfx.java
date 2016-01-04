@@ -10,6 +10,9 @@ public class Gfx {
 	public static Animation playerJumpUp;
 	public static Animation playerJumpDown;
 	public static Spritesheet playerSheet;
+	
+	public static Spritesheet entranceSheet;
+	public static Animation[] entranceAnims;
 
 	public static void Initialize()
 	{
@@ -19,6 +22,14 @@ public class Gfx {
 		playerJumpDown = new Animation(0.2f, playerSheet.get(1));
 		playerWalk = new Animation(0.1f, playerSheet.getRange(2, 4));
 		playerWalk.setPlayMode(PlayMode.LOOP_PINGPONG);
+		
+		entranceSheet = new Spritesheet("entrance-sheet.png", 1, 4);		
+		entranceAnims = new Animation[4];
+		entranceAnims[0] = new Animation(0.2f, entranceSheet.get(0));
+		entranceAnims[1] = new Animation(0.2f, entranceSheet.get(1));
+		entranceAnims[2] = new Animation(0.2f, entranceSheet.get(2));
+		entranceAnims[3] = new Animation(0.2f, entranceSheet.get(3));
+		
 	}
 	
 }
