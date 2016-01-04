@@ -11,7 +11,7 @@ public class TilemapWrapper {
 
 	public TiledMap tilemap;
 	public OrthogonalTiledMapRenderer renderer;
-	private RoomInfo rinfo;
+	public RoomInfo rinfo;
 
 	public TilemapWrapper (String path)
 	{
