@@ -58,6 +58,11 @@ public class GameWorld {
 		engine.addSystem(physics.physicsSystem);
 	}
 	
+	public void clear()
+	{
+		engine.Clear();
+	}
+	
 	public static TransformComponent playerPositionComponent;
 	
 	public void makePlayer(int x, int y) {
