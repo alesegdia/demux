@@ -63,8 +63,6 @@ public class TmxRoomInfoLoader {
 			rinfo.constraintSolved = Integer.parseInt((String) props.get("constraint-solved"));
 		}
 		
-		System.out.println(rinfo);
-		
 		return rinfo;
 	}
 
