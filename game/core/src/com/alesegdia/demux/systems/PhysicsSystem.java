@@ -8,6 +8,7 @@ import com.alesegdia.demux.ecs.EntitySystem;
 import com.alesegdia.demux.physics.CollisionLayers;
 import com.alesegdia.demux.components.PhysicsComponent;
 import com.alesegdia.demux.components.PlayerComponent;
+import com.alesegdia.demux.components.RoomLinkComponent;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -43,27 +44,65 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 		callbacks.add(new ICollisionCallback(){
 			{ setCategories( CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.CATEGORY_MAP ); }
 			
+			// TODO: use also 3 raycasts to check for grounded
 			@Override
 			public void startCollision(Contact c, Body player, Body map, Vector2 normal) {
 				Entity e = (Entity) player.getUserData();
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+				System.out.println("ENTER " + map);
 				if( normal.y == -1 ) {
 					PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-					
 					plc.jumping = false;
 					pc.grounded = true;
+					plc.platform = map;
+					plc.superJump = false;
+
 				}
 			}
 
 			@Override
 			public void endCollision(Contact c, Body player, Body map) {
+				System.out.println("EXIT " + map);
 				Entity e = (Entity) player.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-				pc.grounded = false;
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
-				plc.jumping = true;
+				if( plc.platform == map ) //pc.body.getLinearVelocity().y != 0 )
+				{
+					plc.platform = null;
+					pc.grounded = false;
+					plc.jumping = true;
+				}
 			}
 		});
+
+		callbacks.add(new ICollisionCallback(){
+			{ setCategories( CollisionLayers.CATEGORY_PLAYERLOGIC, CollisionLayers.CATEGORY_LINK ); }
+			
+			// TODO: use also 3 raycasts to check for grounded
+			@Override
+			public void startCollision(Contact c, Body player, Body link, Vector2 normal) {
+				Entity playerEntity = (Entity) player.getUserData();
+				Entity linkEntity = (Entity) link.getUserData();
+				PlayerComponent plc = (PlayerComponent) playerEntity.getComponent(PlayerComponent.class);
+				RoomLinkComponent lc = (RoomLinkComponent) linkEntity.getComponent(RoomLinkComponent.class);
+				
+				plc.gotoRoom = lc.link;
+				plc.linkEntity = linkEntity;
+			}
+
+			@Override
+			public void endCollision(Contact c, Body player, Body link) {
+				Entity e = (Entity) player.getUserData();
+				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
+				if( pc.body.getLinearVelocity().y != 0 )
+				{
+					pc.grounded = false;
+					PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
+					plc.jumping = true;
+				}
+			}
+		});
+
 	}
 
 	
