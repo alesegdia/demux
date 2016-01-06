@@ -45,7 +45,8 @@ public class MapGameplayScreen implements Screen {
 		this.currentRoom = startRoom;
 		
 		gw.clear();
-		g.physics.clear();
+		//gw = new GameWorld(g.physics, g.batch, g.cam);
+		g.physics.Dispose();
 
 		if( spawnPos == null )
 		{
