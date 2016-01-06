@@ -1,5 +1,6 @@
 package com.alesegdia.demux.screen;
 
+import com.alesegdia.demux.DirectionUtils;
 import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.GameWorld;
 import com.alesegdia.demux.GdxGame;
@@ -49,7 +50,7 @@ public class MapGameplayScreen implements Screen {
 
 		if( prd.spawnPos == null )
 		{
-			gw.makePlayer(200, 40, prd);
+			gw.makePlayer(100, 40, prd);
 		}
 		else
 		{
@@ -97,7 +98,7 @@ public class MapGameplayScreen implements Screen {
 		if( plc.gotoRoom != null )
 		{
 			Vector2 pos = new Vector2(plc.gotoRoom.connectedLink.relCoord.x * 16 * 8, plc.gotoRoom.connectedLink.relCoord.y * 16 * 8);
-			Vector2 offset = gw.getOffsetForDirection(plc.gotoRoom.connectedLink.direction);
+			Vector2 offset = DirectionUtils.GetOffsetForDirection(plc.gotoRoom.connectedLink.direction);
 			offset.x *= 16;
 			offset.y *= 16;
 			

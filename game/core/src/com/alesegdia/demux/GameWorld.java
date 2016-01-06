@@ -125,28 +125,26 @@ public class GameWorld {
 		
 		TransformComponent tc = (TransformComponent) entrance.addComponent(new TransformComponent());
 		tc.position.set( l.relCoord.x * 8, l.relCoord.y * 8 );
-		tc.position.add( getOffsetForDirection(l.direction) );
+		tc.position.add( DirectionUtils.GetOffsetForDirection(l.direction) );
 		
 		GraphicsComponent gc = (GraphicsComponent) entrance.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.entranceSheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
 		
 		AnimationComponent ac = (AnimationComponent) entrance.addComponent(new AnimationComponent());
-		ac.currentAnim = Gfx.entranceAnims[getIndexForDirection(l.direction)];
+		ac.currentAnim = Gfx.entranceAnims[DirectionUtils.GetIndexForDirection(l.direction)];
 		
 		RoomLinkComponent rlc = (RoomLinkComponent) entrance.addComponent(new RoomLinkComponent());
 		rlc.link = l;
 		
 		PhysicsComponent phc = (PhysicsComponent) entrance.addComponent(new PhysicsComponent());
-		Vector2 pos = new Vector2(l.relCoord.x * GameConfig.BLOCK_X * 8, l.relCoord.y * GameConfig.BLOCK_Y * 8);
+		Vector2 pos = new Vector2(l.relCoord.x * GameConfig.BLOCK_X, l.relCoord.y * GameConfig.BLOCK_Y);
 		
-		/*
-		Vector2 offset = getOffsetForDirection(l.direction);
-		offset.x *= 16;
-		offset.y *= 16;
-		
+		Vector2 offset = DirectionUtils.GetOffsetForDirection(l.direction);
 		pos.add(offset);
-		*/
+		
+		pos.x *= GameConfig.METERS_TO_PIXELS / 2f;
+		pos.y *= GameConfig.METERS_TO_PIXELS / 2f;
 		
 		phc.body = physics.createLinkBody(pos.x, pos.y);
 		phc.body.setUserData(entrance);
@@ -159,106 +157,21 @@ public class GameWorld {
 		
 		TransformComponent tc = (TransformComponent) entrance.addComponent(new TransformComponent());
 		tc.position.set( l.relCoord.x * 8, l.relCoord.y * 8 );
-		tc.position.add( getOffsetForDirection(l.direction) );
+		tc.position.add( DirectionUtils.GetOffsetForDirection(l.direction) );
 		
 		PhysicsComponent phc = (PhysicsComponent) entrance.addComponent(new PhysicsComponent());
-		Vector2 pos = new Vector2(l.relCoord.x * GameConfig.BLOCK_X * 8, l.relCoord.y * GameConfig.BLOCK_Y * 8);
+		Vector2 pos = new Vector2(l.relCoord.x * GameConfig.BLOCK_X, l.relCoord.y * GameConfig.BLOCK_Y);
 		
-		/*
-		Vector2 offset = getOffsetForDirection2(l.direction);
-		offset.x *= GameConfig.BLOCK_X;
-		offset.y *= GameConfig.BLOCK_Y;
-		
+		Vector2 offset = DirectionUtils.GetOffsetForDirection(l.direction);
 		pos.add(offset);
-		*/
+		pos.x *= GameConfig.METERS_TO_PIXELS / 2f;
+		pos.y *= GameConfig.METERS_TO_PIXELS / 2f;		
 		
-		Vector2 sz = getSizeForDirection2(l.direction);
+		Vector2 sz = DirectionUtils.GetSizeForDirection(l.direction);
 		phc.body = physics.createBlockedLinkBody(pos.x, pos.y, sz.x, sz.y);
 		phc.body.setUserData(entrance);
 		
 		engine.addEntity(entrance);		
-	}
-
-
-
-	public Vector2 getOffsetForDirection(Direction dir) {
-		Vector2 offset = new Vector2(0,0);
-		switch(dir)
-		{
-		case TOP:
-			offset.x = GameConfig.BLOCK_X / 4f;
-			offset.y = GameConfig.BLOCK_Y / 2f - 0.5f;
-			break;
-		case DOWN:
-			offset.x = GameConfig.BLOCK_X / 4f;
-			offset.y = 0.5f;
-			break;			
-		case LEFT:
-			offset.x = 0.5f;
-			offset.y = 1f;
-			break;
-		case RIGHT:
-			offset.x = GameConfig.BLOCK_X / 2f - 0.5f;
-			offset.y = 1;
-		}
-		return offset;
-	}
-
-	public Vector2 getOffsetForDirection2(Direction dir) {
-		Vector2 offset = new Vector2(0,0);
-		switch(dir)
-		{
-		case TOP:
-			offset.x = GameConfig.BLOCK_X / 4f;
-			offset.y = GameConfig.BLOCK_Y / 2f - 0.25f;
-			break;
-		case DOWN:
-			offset.x = GameConfig.BLOCK_X / 4f;
-			offset.y = 0.25f;
-			break;			
-		case LEFT:
-			offset.x = 0.25f;
-			offset.y = 1;
-			break;
-		case RIGHT:
-			offset.x = GameConfig.BLOCK_X / 2f - 0.25f;
-			offset.y = 1;
-		}
-		return offset;
-	}
-
-	public Vector2 getSizeForDirection2(Direction dir) {
-		Vector2 offset = new Vector2(0,0);
-		switch(dir)
-		{
-		case TOP:
-			offset.x = 0.25f;
-			offset.y = 0.25f;
-			break;
-		case DOWN:
-			offset.x = 0.50f;
-			offset.y = 0.255f;
-			break;			
-		case LEFT:
-			offset.x = 0.25f;
-			offset.y = 0.25f;
-			break;
-		case RIGHT:
-			offset.x = 0.25f;
-			offset.y = 0.25f;
-		}
-		return offset;
-	}
-
-	private int getIndexForDirection(Direction dir) {
-		switch(dir)
-		{
-		case TOP: return 2;
-		case DOWN: return 3;
-		case LEFT: return 1;
-		case RIGHT: return 0;
-		}
-		return -1;
 	}
 
 	public void setCam() {
