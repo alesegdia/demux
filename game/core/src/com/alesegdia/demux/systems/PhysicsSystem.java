@@ -49,20 +49,17 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			public void startCollision(Contact c, Body player, Body map, Vector2 normal) {
 				Entity e = (Entity) player.getUserData();
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
-				System.out.println("ENTER " + map);
-				if( normal.y == -1 ) {
+				if( Math.abs(-1 - normal.y) < 0.1 ) {
 					PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 					plc.jumping = false;
 					pc.grounded = true;
 					plc.platform = map;
 					plc.superJump = false;
-
 				}
 			}
 
 			@Override
 			public void endCollision(Contact c, Body player, Body map) {
-				System.out.println("EXIT " + map);
 				Entity e = (Entity) player.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
@@ -92,14 +89,6 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 
 			@Override
 			public void endCollision(Contact c, Body player, Body link) {
-				Entity e = (Entity) player.getUserData();
-				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
-				if( pc.body.getLinearVelocity().y != 0 )
-				{
-					pc.grounded = false;
-					PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
-					plc.jumping = true;
-				}
 			}
 		});
 
