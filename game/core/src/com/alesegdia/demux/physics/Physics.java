@@ -149,5 +149,15 @@ public class Physics {
 		return this.world;
 	}
 
+	public void clear() {
+		Array<Body> bodies = new Array<Body>();
+		world.getBodies(bodies);
+		for( Body b : bodies )
+		{
+			world.destroyBody(b);
+		}
+		//world = new World(new Vector2(0, -10f), true);
+	}
+
 
 }
