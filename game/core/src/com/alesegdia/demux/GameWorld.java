@@ -65,7 +65,7 @@ public class GameWorld {
 	
 	public static TransformComponent playerPositionComponent;
 	
-	public void makePlayer(int x, int y) {
+	public void makePlayer(int x, int y, LinearVelocityComponent plc) {
 		player = new Entity();
 		
 		PhysicsComponent pc = (PhysicsComponent) player.addComponent(new PhysicsComponent());
@@ -83,12 +83,19 @@ public class GameWorld {
 		AnimationComponent ac = (AnimationComponent) player.addComponent(new AnimationComponent());
 		ac.currentAnim = Gfx.playerWalk;
 
-		PlayerComponent plc = (PlayerComponent) player.addComponent(new PlayerComponent());
+		player.addComponent(new PlayerComponent());
 
-		LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
-		lvc.speed.set(0.5f,0.25f);
-		lvc.cap.y = 2;
-		lvc.doCap[1] = true;
+		if( plc == null )
+		{
+			LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
+			lvc.speed.set(0.5f,0.25f);
+			lvc.cap.y = 2;
+			lvc.doCap[1] = true;
+		}
+		else
+		{
+			player.addComponent(plc);
+		}
 		
 		ActiveComponent actc = (ActiveComponent) player.addComponent(new ActiveComponent());
 		actc.isActive = true;
