@@ -22,8 +22,8 @@ public class Physics {
 	Box2DDebugRenderer debugRenderer;
 	private float accumulator = 0;
 	private static final float TIME_STEP = 1/60.f;
-	private static final int VELOCITY_ITERATIONS = 6;
-	private static final int POSITION_ITERATIONS = 2;
+	private static final int VELOCITY_ITERATIONS = 10;
+	private static final int POSITION_ITERATIONS = 5;
 	
 	public PhysicsSystem physicsSystem;
 	
