@@ -104,32 +104,76 @@ public class GameWorld {
 		engine.addEntity(player);
 	}
 	
-	public void makeEntrance(float x, float y, Direction dir)
+	public void makeEntrance(Link l)
 	{
 		Entity entrance = new Entity();
 		
 		TransformComponent tc = (TransformComponent) entrance.addComponent(new TransformComponent());
-		tc.position.set( x * 8, y * 8 );
-		tc.position.add( getOffsetForDirection(dir) );
+		tc.position.set( l.relCoord.x * 8, l.relCoord.y * 8 );
+		tc.position.add( getOffsetForDirection(l.direction) );
 		
 		GraphicsComponent gc = (GraphicsComponent) entrance.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.entranceSheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
 		
 		AnimationComponent ac = (AnimationComponent) entrance.addComponent(new AnimationComponent());
-		ac.currentAnim = Gfx.entranceAnims[getIndexForDirection(dir)];
+		ac.currentAnim = Gfx.entranceAnims[getIndexForDirection(l.direction)];
+		
+		RoomLinkComponent rlc = (RoomLinkComponent) entrance.addComponent(new RoomLinkComponent());
+		rlc.link = l;
+		
+		PhysicsComponent phc = (PhysicsComponent) entrance.addComponent(new PhysicsComponent());
+		Vector2 pos = new Vector2(l.relCoord.x * 16 * 8, l.relCoord.y * 16 * 8);
+		
+		Vector2 offset = getOffsetForDirection(l.direction);
+		offset.x *= 16;
+		offset.y *= 16;
+		
+		pos.add(offset);
+		
+		phc.body = physics.createLinkBody(pos.x, pos.y);
+		phc.body.setUserData(entrance);
 		
 		engine.addEntity(entrance);
 	}
 	
-	private Vector2 getOffsetForDirection(Direction dir) {
+	private void makeBlockEntrance(Link l) {
+		Entity entrance = new Entity();
+		
+		TransformComponent tc = (TransformComponent) entrance.addComponent(new TransformComponent());
+		tc.position.set( l.relCoord.x * 8, l.relCoord.y * 8 );
+		tc.position.add( getOffsetForDirection(l.direction) );
+		
+		PhysicsComponent phc = (PhysicsComponent) entrance.addComponent(new PhysicsComponent());
+		Vector2 pos = new Vector2(l.relCoord.x * 16 * 8, l.relCoord.y * 16 * 8);
+		
+		Vector2 offset = getOffsetForDirection2(l.direction);
+		offset.x *= 16;
+		offset.y *= 16;
+		
+		pos.add(offset);
+		
+		Vector2 sz = getSizeForDirection2(l.direction);
+		phc.body = physics.createBlockedLinkBody(pos.x, pos.y, sz.x, sz.y);
+		phc.body.setUserData(entrance);
+		
+		engine.addEntity(entrance);		
+	}
+
+
+
+	public Vector2 getOffsetForDirection(Direction dir) {
 		Vector2 offset = new Vector2(0,0);
 		switch(dir)
 		{
 		case TOP:
-			offset.x = 4;
+			offset.x = 4f;
 			offset.y = 7.5f;
 			break;
+		case DOWN:
+			offset.x = 4f;
+			offset.y = 0.5f;
+			break;			
 		case LEFT:
 			offset.x = 0.5f;
 			offset.y = 1;
@@ -137,6 +181,52 @@ public class GameWorld {
 		case RIGHT:
 			offset.x = 7.5f;
 			offset.y = 1;
+		}
+		return offset;
+	}
+
+	public Vector2 getOffsetForDirection2(Direction dir) {
+		Vector2 offset = new Vector2(0,0);
+		switch(dir)
+		{
+		case TOP:
+			offset.x = 4f;
+			offset.y = 7.75f;
+			break;
+		case DOWN:
+			offset.x = 4f;
+			offset.y = 0.25f;
+			break;			
+		case LEFT:
+			offset.x = 0.25f;
+			offset.y = 1;
+			break;
+		case RIGHT:
+			offset.x = 7.75f;
+			offset.y = 1;
+		}
+		return offset;
+	}
+
+	public Vector2 getSizeForDirection2(Direction dir) {
+		Vector2 offset = new Vector2(0,0);
+		switch(dir)
+		{
+		case TOP:
+			offset.x = 0.25f;
+			offset.y = 0.25f;
+			break;
+		case DOWN:
+			offset.x = 0.50f;
+			offset.y = 0.255f;
+			break;			
+		case LEFT:
+			offset.x = 0.25f;
+			offset.y = 0.25f;
+			break;
+		case RIGHT:
+			offset.x = 0.25f;
+			offset.y = 0.25f;
 		}
 		return offset;
 	}
@@ -177,13 +267,16 @@ public class GameWorld {
 		return player.isDead;
 	}
 
-	public void buildMapEntities(TilemapWrapper currentMap) {
-		Room r = currentMap.createRoom();
+	public void buildMapEntities(Room r) {
 		for( Link l : r.links )
 		{
 			if( l.isConnected() )
 			{
-				makeEntrance(l.relCoord.x, l.relCoord.y, l.direction);
+				makeEntrance(l);
+			}
+			else
+			{
+				makeBlockEntrance(l);
 			}
 		}
 	}
