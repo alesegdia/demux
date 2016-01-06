@@ -9,6 +9,4 @@ public class PlayerRespawnData {
 	public Vector2 prevlvc = null;
 	public Vector2 spawnPos = null;
 
-	
-	
 }
