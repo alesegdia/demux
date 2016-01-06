@@ -31,6 +31,67 @@ public class HumanControllerSystem extends EntitySystem {
 		PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
 		
+		// TODO: use 3 raycasts to check for grounded
+		int dx = 0; int dy = 0;
+		float prevYlinear = phc.body.getLinearVelocity().y;
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+			dx = -1;
+		} else if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+			dx = 1;
+		}
+		
+		DashComponent dc = (DashComponent) e.getComponent(DashComponent.class);
+
+		if( Gdx.input.isKeyJustPressed(Input.Keys.E) ) 
+		{
+			dc.dashTimer = 0.3f;
+			dc.dashIntensity = 8;
+		}
+		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) ) 
+		{
+			dc.dashTimer = 0.3f;
+			dc.dashIntensity = -8;
+		}
+		
+		if( !phc.grounded )
+		{
+			dc.dashTimer = 0;
+		}
+		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			if( phc.grounded ) {
+				plc.jumping = true;
+				lvc.doCap[1] = false;
+				if( dc.dashTimer > 0 )
+				{
+					prevYlinear = 7.5f;
+					plc.superJump = true;
+				}
+				else
+				{
+					prevYlinear = 6;
+				}
+			}
+		}
+		
+		if( plc.jumping ) {
+			lvc.doCap[1] = false;
+		}
+		
+
+		float vx = 5;
+		if( plc.superJump )
+		{
+			vx = 10;
+		}
+		lvc.linearVelocity.x = dx * vx * lvc.speed.x;
+		lvc.linearVelocity.y = prevYlinear;
+		phc.body.setGravityScale(1);
+		
+		plc.isPressingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+		
 		if( phc.grounded ){
 			if( Math.abs(phc.body.getLinearVelocity().x) > 0 ) {
 				ac.currentAnim = Gfx.playerWalk;
@@ -47,46 +108,20 @@ public class HumanControllerSystem extends EntitySystem {
 			}
 		}
 		
-		int dx = 0; int dy = 0;
-		float prevYlinear = phc.body.getLinearVelocity().y;
-		
-		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-			dx = -1;
-		} else if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-			dx = 1;
-		}
-
-		
-		if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
+		if( dc.dashTimer > 0 )
 		{
-			if( !phc.grounded )
-			{
-				plc.jumping = false;
-			}
+			ac.currentAnim = Gfx.playerDash;
+			gc.shadowEffectEnabled = true;
 		}
-		else if(Gdx.input.isKeyPressed(Input.Keys.UP))
+		else
 		{
-			dy = 1;
-		}
-		
-		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			if( true ) { //phc.grounded ) {
-				plc.jumping = true;
-				lvc.doCap[1] = false;
-				prevYlinear = 6;
-
-			}
-		}
-		
-		if( plc.jumping ) {
-			lvc.doCap[1] = false;
+			gc.shadowEffectEnabled = false;
 		}
 
-		lvc.linearVelocity.x = dx * 5 * lvc.speed.x;
-		lvc.linearVelocity.y = prevYlinear;
-		phc.body.setGravityScale(1);
-		
-		plc.isPressingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+		if( plc.superJump )
+		{
+			gc.shadowEffectEnabled = true;
+		}
 		
 	}
 
