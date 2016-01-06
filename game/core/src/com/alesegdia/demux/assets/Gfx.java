@@ -13,13 +13,15 @@ public class Gfx {
 	
 	public static Spritesheet entranceSheet;
 	public static Animation[] entranceAnims;
+	public static Animation playerDash;
 
 	public static void Initialize()
 	{
-		playerSheet = new Spritesheet("tiacascoanim.png", 3, 3);
+		playerSheet = new Spritesheet("tiacascoanim2.png", 3, 3);
 		playerStand = new Animation(0.2f, playerSheet.get(0));
 		playerJumpUp = new Animation(0.2f, playerSheet.get(1));
 		playerJumpDown = new Animation(0.2f, playerSheet.get(1));
+		playerDash = new Animation(0.2f, playerSheet.get(6));
 		playerWalk = new Animation(0.1f, playerSheet.getRange(2, 4));
 		playerWalk.setPlayMode(PlayMode.LOOP_PINGPONG);
 		
