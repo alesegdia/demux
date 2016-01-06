@@ -108,8 +108,10 @@ public class Physics {
 		PolygonShape cs = new PolygonShape();
 		cs.setAsBox(0.14f, 0.35f);
 		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
+		cs.setAsBox(0.15f, 0.36f);
 		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERLOGIC, CollisionLayers.MASK_PLAYERLOGIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
 		cs.dispose();
+		b.setFixedRotation(true);
 		return b;
 
 	}
@@ -148,16 +150,5 @@ public class Physics {
 	public World world() {
 		return this.world;
 	}
-
-	public void clear() {
-		Array<Body> bodies = new Array<Body>();
-		world.getBodies(bodies);
-		for( Body b : bodies )
-		{
-			world.destroyBody(b);
-		}
-		//world = new World(new Vector2(0, -10f), true);
-	}
-
 
 }
