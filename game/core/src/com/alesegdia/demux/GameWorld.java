@@ -138,13 +138,15 @@ public class GameWorld {
 		rlc.link = l;
 		
 		PhysicsComponent phc = (PhysicsComponent) entrance.addComponent(new PhysicsComponent());
-		Vector2 pos = new Vector2(l.relCoord.x * 16 * 8, l.relCoord.y * 16 * 8);
+		Vector2 pos = new Vector2(l.relCoord.x * GameConfig.BLOCK_X * 8, l.relCoord.y * GameConfig.BLOCK_Y * 8);
 		
+		/*
 		Vector2 offset = getOffsetForDirection(l.direction);
 		offset.x *= 16;
 		offset.y *= 16;
 		
 		pos.add(offset);
+		*/
 		
 		phc.body = physics.createLinkBody(pos.x, pos.y);
 		phc.body.setUserData(entrance);
@@ -162,11 +164,13 @@ public class GameWorld {
 		PhysicsComponent phc = (PhysicsComponent) entrance.addComponent(new PhysicsComponent());
 		Vector2 pos = new Vector2(l.relCoord.x * GameConfig.BLOCK_X * 8, l.relCoord.y * GameConfig.BLOCK_Y * 8);
 		
+		/*
 		Vector2 offset = getOffsetForDirection2(l.direction);
 		offset.x *= GameConfig.BLOCK_X;
 		offset.y *= GameConfig.BLOCK_Y;
 		
 		pos.add(offset);
+		*/
 		
 		Vector2 sz = getSizeForDirection2(l.direction);
 		phc.body = physics.createBlockedLinkBody(pos.x, pos.y, sz.x, sz.y);
