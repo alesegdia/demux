@@ -101,6 +101,9 @@ public class GameWorld {
 		ActiveComponent actc = (ActiveComponent) player.addComponent(new ActiveComponent());
 		actc.isActive = true;
 		
+		DashComponent dc = (DashComponent) player.addComponent(new DashComponent());
+		
+		
 		engine.addEntity(player);
 	}
 	
