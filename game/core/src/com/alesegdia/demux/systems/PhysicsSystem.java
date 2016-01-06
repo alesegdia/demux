@@ -128,6 +128,8 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			icb.startCollision(contact, b1, b2, normal);
 			return true;
 		} else if( CheckCollision(cb2, cb1, icb.B1_CATEGORY, icb.B2_CATEGORY) ) {
+			normal.x = -normal.x;
+			normal.y = -normal.y;
 			icb.startCollision(contact, b2, b1, normal);
 			return true;
 		}
