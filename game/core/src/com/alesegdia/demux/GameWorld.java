@@ -76,7 +76,8 @@ public class GameWorld {
 		System.out.println(gc);
 		gc.drawElement = Gfx.playerSheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
-		
+		gc.hasShadowEffect = true;
+
 		playerPositionComponent = (TransformComponent) player.addComponent(new TransformComponent());
 		playerPositionComponent.position = pc.body.getPosition();
 		
