@@ -51,6 +51,7 @@ public class GameWorld {
 		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new UpdatePhysicsSystem());
+		engine.addSystem(new DashingSystem());
 		engine.addSystem(new MovementSystem());
 		engine.addSystem(new FlipSystem());
 		engine.addSystem(new DrawingSystem(batch), true);
