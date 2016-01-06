@@ -14,9 +14,9 @@ public class PlayerComponent extends Component{
 	public boolean prevWasSolid;
 	public Link gotoRoom = null;
 	public Vector2 spawnPos;
-	public Entity linkEntity;
+	public Entity linkEntity = null;
 	public boolean superJump;
-	public Body platform;
+	public Body platform = null;
 	
 
 }
