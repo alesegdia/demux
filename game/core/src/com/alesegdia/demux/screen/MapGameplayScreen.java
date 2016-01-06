@@ -3,6 +3,7 @@ package com.alesegdia.demux.screen;
 import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.GameWorld;
 import com.alesegdia.demux.GdxGame;
+import com.alesegdia.demux.PlayerRespawnData;
 import com.alesegdia.demux.assets.TilemapWrapper;
 import com.alesegdia.demux.assets.Tmx;
 import com.alesegdia.demux.components.LinearVelocityComponent;
@@ -35,26 +36,24 @@ public class MapGameplayScreen implements Screen {
 	
 	public void reset( Room startRoom )
 	{
-		reset(startRoom, null, null);
+		reset(startRoom, new PlayerRespawnData());
 	}
 	
-	public void reset( Room startRoom, Vector2 spawnPos, LinearVelocityComponent plc )
+	public void reset( Room startRoom, PlayerRespawnData prd )
 	{
-		System.out.println(startRoom.rinfo.id);
 		this.currentMap = Tmx.GetMap(startRoom.rinfo.id);
 		this.currentRoom = startRoom;
 		
 		gw.clear();
-		//gw = new GameWorld(g.physics, g.batch, g.cam);
 		g.physics.Dispose();
 
-		if( spawnPos == null )
+		if( prd.spawnPos == null )
 		{
-			gw.makePlayer(200, 40, plc);
+			gw.makePlayer(200, 40, prd);
 		}
 		else
 		{
-			gw.makePlayer((int)spawnPos.x, (int)spawnPos.y, plc);
+			gw.makePlayer((int)prd.spawnPos.x, (int)prd.spawnPos.y, prd );
 		}
 		
 		Array<Body> bodies = MapBodyBuilder.buildShapes(this.currentMap.tilemap, GameConfig.METERS_TO_PIXELS, g.physics.world());
@@ -101,7 +100,6 @@ public class MapGameplayScreen implements Screen {
 			Vector2 offset = gw.getOffsetForDirection(plc.gotoRoom.connectedLink.direction);
 			offset.x *= 16;
 			offset.y *= 16;
-
 			
 			switch(plc.gotoRoom.connectedLink.direction)
 			{
@@ -109,7 +107,7 @@ public class MapGameplayScreen implements Screen {
 				offset.y -= 8;
 				break;
 			case DOWN:
-				offset.y += 8;
+				offset.y += 10;
 				break;
 			case RIGHT:
 				offset.x -= 8;
@@ -120,7 +118,11 @@ public class MapGameplayScreen implements Screen {
 			}
 			pos.add(offset);
 
-			this.reset(plc.gotoRoom.connectedRoom, pos, (LinearVelocityComponent) gw.getPlayer().getComponent(LinearVelocityComponent.class));			
+			PlayerRespawnData prd = new PlayerRespawnData();
+			prd.plc = plc;
+			prd.prevlvc = ((LinearVelocityComponent) gw.getPlayer().getComponent(LinearVelocityComponent.class)).linearVelocity;
+			prd.spawnPos = pos;
+			this.reset(plc.gotoRoom.connectedRoom, prd);			
 		}
 
 		Gdx.gl.glEnable(GL20.GL_BLEND);

@@ -65,12 +65,17 @@ public class GameWorld {
 	
 	public static TransformComponent playerPositionComponent;
 	
-	public void makePlayer(int x, int y, LinearVelocityComponent plc) {
+	public void makePlayer(int x, int y, PlayerRespawnData prd) {
 		player = new Entity();
 		
 		PhysicsComponent pc = (PhysicsComponent) player.addComponent(new PhysicsComponent());
 		pc.body = physics.createPlayerBody(x, y);
 		pc.body.setUserData(player);
+		pc.grounded = false;
+		if( prd.prevlvc != null )
+		{
+			pc.body.setLinearVelocity(prd.prevlvc);
+		}
 		
 		GraphicsComponent gc = (GraphicsComponent) player.addComponent(new GraphicsComponent());
 		System.out.println(gc);
@@ -84,18 +89,25 @@ public class GameWorld {
 		AnimationComponent ac = (AnimationComponent) player.addComponent(new AnimationComponent());
 		ac.currentAnim = Gfx.playerWalk;
 
-		player.addComponent(new PlayerComponent());
-
-		if( plc == null )
+		if( prd.plc != null )
 		{
-			LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
-			lvc.speed.set(0.5f,0.25f);
-			lvc.cap.y = 2;
-			lvc.doCap[1] = true;
+			prd.plc.gotoRoom = null;
+			prd.plc.linkEntity = null;
+			prd.plc.platform = null;
+			player.addComponent(prd.plc);
 		}
 		else
 		{
-			player.addComponent(plc);
+			PlayerComponent plyc = (PlayerComponent) player.addComponent(new PlayerComponent());
+		}
+		
+		LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
+		lvc.speed.set(0.5f,0.25f);
+		lvc.cap.y = 10;
+		lvc.doCap[1] = false;
+		if( prd.prevlvc != null )
+		{
+			lvc.linearVelocity.set(prd.prevlvc);
 		}
 		
 		ActiveComponent actc = (ActiveComponent) player.addComponent(new ActiveComponent());

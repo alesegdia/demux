@@ -37,7 +37,6 @@ public class Tmx {
 			System.out.println(r.rtype);
 			if( r.rtype == rtype )
 			{
-				System.out.println("MEH!");
 				lr.add(r);
 			}
 		}
