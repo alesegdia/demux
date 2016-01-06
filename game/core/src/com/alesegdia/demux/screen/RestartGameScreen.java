@@ -36,7 +36,7 @@ public class RestartGameScreen implements Screen {
         ExactRoomProvider mrp = new ExactRoomProvider();
         List<Room> rooms = new LinkedList<Room>();
         rooms.add(Tmx.GetMap("common_2x1").createRoom());
-        rooms.add(Tmx.GetMap("common_4x1").createRoom());
+        //rooms.add(Tmx.GetMap("common_4x1").createRoom());
         mrp.addAll(rooms);
         
 		LayoutBuilder lb = new LayoutBuilder();
