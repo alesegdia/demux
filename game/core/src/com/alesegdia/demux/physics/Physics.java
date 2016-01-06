@@ -113,7 +113,30 @@ public class Physics {
 		return b;
 
 	}
-	
+
+	public Body createLinkBody(float x, float y) {
+		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS, false);
+		//CircleShape cs = new CircleShape();
+		//cs.setRadius(7.41f * GameConfig.PIXELS_TO_METERS);
+		PolygonShape cs = new PolygonShape();
+		cs.setAsBox(0.1f, 0.1f);
+		createFixture(b, cs, CollisionLayers.CATEGORY_LINK, CollisionLayers.MASK_LINK, CollisionLayers.GROUP_LINK, 1f, 0f, 0f, true);
+		cs.dispose();
+		return b;
+
+	}
+
+	public Body createBlockedLinkBody(float x, float y, float sx, float sy) {
+		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS, false);
+		//CircleShape cs = new CircleShape();
+		//cs.setRadius(7.41f * GameConfig.PIXELS_TO_METERS);
+		PolygonShape cs = new PolygonShape();
+		cs.setAsBox(sx, sy);
+		createFixture(b, cs, CollisionLayers.CATEGORY_MAP, CollisionLayers.MASK_MAP, CollisionLayers.GROUP_MAP, 1f, 0f, 0f);
+		cs.dispose();
+		return b;
+	}
+
 	public void Dispose() {
 		Array<Body> bodies = new Array<Body>();
 		this.world.getBodies(bodies);
