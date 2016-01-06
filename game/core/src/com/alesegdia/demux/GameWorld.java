@@ -160,11 +160,11 @@ public class GameWorld {
 		tc.position.add( getOffsetForDirection(l.direction) );
 		
 		PhysicsComponent phc = (PhysicsComponent) entrance.addComponent(new PhysicsComponent());
-		Vector2 pos = new Vector2(l.relCoord.x * 16 * 8, l.relCoord.y * 16 * 8);
+		Vector2 pos = new Vector2(l.relCoord.x * GameConfig.BLOCK_X * 8, l.relCoord.y * GameConfig.BLOCK_Y * 8);
 		
 		Vector2 offset = getOffsetForDirection2(l.direction);
-		offset.x *= 16;
-		offset.y *= 16;
+		offset.x *= GameConfig.BLOCK_X;
+		offset.y *= GameConfig.BLOCK_Y;
 		
 		pos.add(offset);
 		
@@ -182,19 +182,19 @@ public class GameWorld {
 		switch(dir)
 		{
 		case TOP:
-			offset.x = 4f;
-			offset.y = 7.5f;
+			offset.x = GameConfig.BLOCK_X / 4f;
+			offset.y = GameConfig.BLOCK_Y / 2f - 0.5f;
 			break;
 		case DOWN:
-			offset.x = 4f;
+			offset.x = GameConfig.BLOCK_X / 4f;
 			offset.y = 0.5f;
 			break;			
 		case LEFT:
 			offset.x = 0.5f;
-			offset.y = 1;
+			offset.y = 1f;
 			break;
 		case RIGHT:
-			offset.x = 7.5f;
+			offset.x = GameConfig.BLOCK_X / 2f - 0.5f;
 			offset.y = 1;
 		}
 		return offset;
@@ -205,11 +205,11 @@ public class GameWorld {
 		switch(dir)
 		{
 		case TOP:
-			offset.x = 4f;
-			offset.y = 7.75f;
+			offset.x = GameConfig.BLOCK_X / 4f;
+			offset.y = GameConfig.BLOCK_Y / 2f - 0.25f;
 			break;
 		case DOWN:
-			offset.x = 4f;
+			offset.x = GameConfig.BLOCK_X / 4f;
 			offset.y = 0.25f;
 			break;			
 		case LEFT:
@@ -217,7 +217,7 @@ public class GameWorld {
 			offset.y = 1;
 			break;
 		case RIGHT:
-			offset.x = 7.75f;
+			offset.x = GameConfig.BLOCK_X / 2f - 0.25f;
 			offset.y = 1;
 		}
 		return offset;
