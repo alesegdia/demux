@@ -23,7 +23,7 @@ public class Tmx {
 			String ext = entry.extension();
 			if( ext.charAt(0) == 't' && ext.charAt(1) == 'm' && ext.charAt(2) == 'x' )
 			{
-				mapHash.put(entry.nameWithoutExtension(), new TilemapWrapper(entry.path()));
+				mapHash.put(entry.nameWithoutExtension(), new TilemapWrapper(entry.path(), entry.nameWithoutExtension()));
 			}
 		}
 	}

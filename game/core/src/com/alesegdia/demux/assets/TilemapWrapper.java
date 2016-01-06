@@ -13,12 +13,13 @@ public class TilemapWrapper {
 	public OrthogonalTiledMapRenderer renderer;
 	public RoomInfo rinfo;
 
-	public TilemapWrapper (String path)
+	public TilemapWrapper (String path, String id)
 	{
 		tilemap = new TmxMapLoader().load(path);
 		float unitScale = 1.f / 16.f;
 		renderer = new OrthogonalTiledMapRenderer(tilemap, unitScale);
 		rinfo = new TmxRoomInfoLoader().load(tilemap);
+		this.rinfo.id = id;
 	}
 
 	public void render(OrthographicCamera cam) {
