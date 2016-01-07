@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="8" tileheight="8" nextobjectid="74">
+ <properties>
+  <property name="constraint" value="0000"/>
+  <property name="links" value="0-0-TLR"/>
+  <property name="needed" value="3"/>
+  <property name="size" value="1x1"/>
+  <property name="type" value="common"/>
+ </properties>
+ <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="50">
+  <image source="tiles.png" width="80" height="40"/>
+  <tile id="2">
+   <properties>
+    <property name="link" value="top"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="link" value="right"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="link" value="bot"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="link" value="left"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="bg" width="12" height="10">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <layer name="blocks" width="12" height="10">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,1,1,0,0,0,0,1,
+1,0,0,0,0,1,1,0,0,0,0,1,
+1,0,0,0,0,1,1,0,0,0,0,1,
+1,0,0,0,1,1,1,1,0,0,0,1,
+1,0,0,1,1,1,1,1,1,0,0,1,
+1,1,1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <objectgroup name="collision">
+  <object id="41" x="0" y="0" width="8" height="56"/>
+  <object id="43" x="88" y="0" width="8" height="56"/>
+  <object id="60" x="8" y="0" width="32" height="8"/>
+  <object id="61" x="56" y="0" width="32" height="8"/>
+  <object id="63" x="0" y="72" width="96" height="8"/>
+  <object id="69" x="40" y="32" width="16" height="40"/>
+  <object id="70" x="56" y="56" width="8" height="16"/>
+  <object id="71" x="32" y="56" width="8" height="16"/>
+  <object id="72" x="24" y="64" width="8" height="8"/>
+  <object id="73" x="64" y="64" width="8" height="8"/>
+ </objectgroup>
+</map>

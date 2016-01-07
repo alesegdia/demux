@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="8" tileheight="8" nextobjectid="38">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="8" tileheight="8" nextobjectid="40">
  <properties>
-  <property name="constraint" value="0000"/>
+  <property name="constraint" value="1000"/>
   <property name="links" value="0-0-TLB 1-0-TRB"/>
+  <property name="needed" value="6"/>
   <property name="size" value="2x1"/>
   <property name="type" value="common"/>
  </properties>
@@ -49,7 +50,7 @@
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -66,5 +67,7 @@
   <object id="35" x="56" y="0" width="80" height="8"/>
   <object id="36" x="152" y="0" width="40" height="8"/>
   <object id="37" x="0" y="72" width="40" height="8"/>
+  <object id="38" x="31.75" y="32.0625" width="32" height="8"/>
+  <object id="39" x="128" y="32" width="32" height="8"/>
  </objectgroup>
 </map>
