@@ -50,7 +50,7 @@ public class MapGameplayScreen implements Screen {
 
 		if( prd.spawnPos == null )
 		{
-			gw.makePlayer(100, 40, prd);
+			gw.makePlayer(32, 40, prd);
 		}
 		else
 		{
