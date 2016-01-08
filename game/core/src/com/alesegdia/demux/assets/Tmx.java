@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
 import com.alesegdia.troidgen.room.RoomType;
 import com.badlogic.gdx.Gdx;
@@ -36,6 +37,34 @@ public class Tmx {
 			Room r = tmw.createRoom();
 			System.out.println(r.rtype);
 			if( r.rtype == rtype )
+			{
+				lr.add(r);
+			}
+		}
+		return lr;
+	}
+	
+	public static List<Room> GetRoomsOfTypeFitting( RoomType rtype, RestrictionSet rs )
+	{
+		List<Room> lr = new LinkedList<Room>();
+		for( TilemapWrapper tmw : mapHash.values() )
+		{
+			Room r = tmw.createRoom();
+			if( r.rtype == rtype && r.rinfo.restriction.resolves(rs) )
+			{
+				lr.add(r);
+			}
+		}
+		return lr;
+	}
+
+	public static List<Room> GetRoomsOfTypeAndRestriction( RoomType rtype, RestrictionSet rs )
+	{
+		List<Room> lr = new LinkedList<Room>();
+		for( TilemapWrapper tmw : mapHash.values() )
+		{
+			Room r = tmw.createRoom();
+			if( r.rtype == rtype && r.rinfo.restriction.equals(rs) )
 			{
 				lr.add(r);
 			}
