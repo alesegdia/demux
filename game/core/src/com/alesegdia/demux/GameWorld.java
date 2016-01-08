@@ -45,6 +45,8 @@ public class GameWorld {
 
 	Entity player;
 
+	private CameraScroller scroll;
+
 	public GameWorld( Physics physics, SpriteBatch batch, Camera cam ) {
 		this.physics = physics;
 		this.cam = cam;
@@ -62,6 +64,11 @@ public class GameWorld {
 	public void clear()
 	{
 		engine.Clear();
+	}
+
+	public void resetScroller( TiledMap tm )
+	{
+		scroll = new CameraScroller( this.cam, tm, (TransformComponent) player.getComponent(TransformComponent.class) );
 	}
 	
 	public static TransformComponent playerPositionComponent;
@@ -193,7 +200,8 @@ public class GameWorld {
 
 	public void setCam() {
 		cam.position.x = playerPositionComponent.position.x;
-		cam.position.y = playerPositionComponent.position.y;
+		cam.position.y = playerPositionComponent.position.y + 2;
+		this.scroll.step();
 	}
 	
 	public void step() {

@@ -61,6 +61,8 @@ public class MapGameplayScreen implements Screen {
 
 		gw.buildMapEntities(startRoom);
 		
+		gw.resetScroller(this.currentMap.tilemap);
+		
 	}
 	
 	@Override
@@ -83,8 +85,7 @@ public class MapGameplayScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		currentMap.render(g.cam);
-		
-		
+
 		g.batch.begin();
 		gw.render();
 		g.batch.end();
