@@ -66,12 +66,12 @@ public class HumanControllerSystem extends EntitySystem {
 				lvc.doCap[1] = false;
 				if( dc.dashTimer > 0 )
 				{
-					prevYlinear = 7.5f;
+					prevYlinear = 8f;
 					plc.superJump = true;
 				}
 				else
 				{
-					prevYlinear = 6;
+					prevYlinear = 5.75f;
 				}
 			}
 		}
