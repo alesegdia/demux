@@ -54,6 +54,8 @@ public class TmxRoomInfoLoader {
 		// parse room type
 		rinfo.rtype = RoomType.FromString((String) props.get("type"));
 		
+		rinfo.neededRooms = Integer.parseInt((String) props.get("needed"));
+		
 		if( rinfo.rtype == RoomType.PASSAGE )
 		{
 			rinfo.passageNextRestriction = RestrictionSet.FromString((String) props.get("needed-constraint"));
