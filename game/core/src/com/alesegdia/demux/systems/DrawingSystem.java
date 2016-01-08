@@ -75,7 +75,7 @@ public class DrawingSystem extends EntitySystem {
 		gc.sprite.setRotation(pc.angle);
 		gc.sprite.setOriginCenter();
 		gc.sprite.setAlpha(gc.alpha);
-		gc.sprite.setPosition(pc.position.x - gc.sprite.getOriginX(), pc.position.y - gc.sprite.getOriginY());
+		gc.sprite.setPosition(pc.position.x - gc.sprite.getOriginX() + gc.offset.x, pc.position.y - gc.sprite.getOriginY() + gc.offset.y);
 		gc.sprite.draw(spriteBatch);
 		
 	}

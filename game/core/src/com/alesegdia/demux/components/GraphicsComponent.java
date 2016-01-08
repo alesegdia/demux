@@ -4,6 +4,7 @@ import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.ecs.Component;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 public class GraphicsComponent extends Component {
 
@@ -19,6 +20,7 @@ public class GraphicsComponent extends Component {
 	public ShadowBufferEntry[] shadowBuffer = new ShadowBufferEntry[5];
 	public int currentShadowIndex = 0;
 	public boolean shadowEffectEnabled = false;
+	public Vector2 offset = new Vector2(0,0);
 	
 	public GraphicsComponent()
 	{

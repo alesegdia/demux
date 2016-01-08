@@ -28,6 +28,7 @@ import com.alesegdia.troidgen.room.Room;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameWorld {
@@ -148,6 +149,22 @@ public class GameWorld {
 		
 		phc.body = physics.createLinkBody(pos.x, pos.y);
 		phc.body.setUserData(entrance);
+		
+		switch(l.direction)
+		{
+		case DOWN:
+			gc.offset.y = 0.25f;
+			break;
+		case LEFT:
+			gc.offset.x = 0.25f;
+			break;
+		case RIGHT:
+			gc.offset.x = -0.25f;
+			break;
+		case TOP:
+			gc.offset.y = -0.25f;
+			break;
+		}
 		
 		engine.addEntity(entrance);
 	}
