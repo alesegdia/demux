@@ -26,7 +26,7 @@ public class MapGameplayScreen implements Screen {
 	private TilemapWrapper currentMap;
 	private GameWorld gw;
 	private Room currentRoom;
-	private boolean physicsDebug = true;
+	private boolean physicsDebug = false;
 
 	public MapGameplayScreen( GdxGame g )
 	{
