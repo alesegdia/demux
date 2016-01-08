@@ -10,14 +10,13 @@ import com.alesegdia.demux.assets.Tmx;
 import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.physics.MapBodyBuilder;
+import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
@@ -138,11 +137,22 @@ public class MapGameplayScreen implements Screen {
 		{
 			if( r == this.currentRoom )
 			{
-				g.srend.setColor(1,0,0,0.5f);
+				g.srend.setColor(1,1,1,((float) Math.sin(Gdx.graphics.getFrameId()/10f) + 1f) / 2f );
 			}
 			else
 			{
-				g.srend.setColor(1,1,1,0.5f);
+				if( r.rinfo.restriction.equals(new RestrictionSet(4, false, false, false, false)) )
+				{
+					g.srend.setColor(0,1,0,0.5f);
+				}
+				else if( r.rinfo.restriction.equals(new RestrictionSet(4, true, false, false, false)) )
+				{
+					g.srend.setColor(0,0,1,0.5f);
+				}
+				else
+				{
+					g.srend.setColor(1,1,1,0.5f);
+				}
 			}
 			g.srend.rect(150 + r.position.x * 16, 150 + r.position.y * 16, r.size.x * 16, r.size.y * 16);
 		}
