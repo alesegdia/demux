@@ -98,27 +98,28 @@ public class MapGameplayScreen implements Screen {
 		PlayerComponent plc = (PlayerComponent) gw.getPlayer().getComponent(PlayerComponent.class);
 		if( plc.gotoRoom != null )
 		{
-			Vector2 pos = new Vector2(plc.gotoRoom.connectedLink.relCoord.x * 16 * 8, plc.gotoRoom.connectedLink.relCoord.y * 16 * 8);
+			Vector2 pos = new Vector2(plc.gotoRoom.connectedLink.relCoord.x * GameConfig.BLOCK_X, plc.gotoRoom.connectedLink.relCoord.y * GameConfig.BLOCK_Y);
 			Vector2 offset = DirectionUtils.GetOffsetForDirection(plc.gotoRoom.connectedLink.direction);
-			offset.x *= 16;
-			offset.y *= 16;
-			
 			switch(plc.gotoRoom.connectedLink.direction)
 			{
 			case TOP:
-				offset.y -= 8;
+				offset.y -= 1f;
 				break;
 			case DOWN:
-				offset.y += 10;
+				offset.y += 1f;
 				break;
 			case RIGHT:
-				offset.x -= 8;
+				offset.x -= 0.8f;
+				offset.y -= 0.2f;
 				break;
 			case LEFT:
-				offset.x += 8;
+				offset.x += 0.8f;
+				offset.y -= 0.2f;
 				break;
 			}
 			pos.add(offset);
+			pos.x *= GameConfig.METERS_TO_PIXELS / 2f;
+			pos.y *= GameConfig.METERS_TO_PIXELS / 2f;		
 
 			PlayerRespawnData prd = new PlayerRespawnData();
 			prd.plc = plc;
