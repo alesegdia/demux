@@ -1,5 +1,6 @@
 package com.alesegdia.demux.map;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.alesegdia.troidgen.renderer.RectDebugger;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
 import com.alesegdia.troidgen.room.RoomType;
+import com.alesegdia.troidgen.util.Logger;
 import com.alesegdia.troidgen.util.Rect;
 import com.alesegdia.troidgen.util.UpperMatrix2D;
 
@@ -36,52 +38,77 @@ public class MultipleConstraintComposer implements IWorldComposer {
 		OverlapSolverConfig osc = new OverlapSolverConfig();
 		osc.separationParameter = 1f;
 		osc.enableTweakNearSeparation = true;
-		osc.resolution = 64;
-		//osc.enclosingRect = new Rect(-20, -15, 150, 150);
-		osc.enclosingRect = new Rect(-75, -75, 150, 150);
+		osc.resolution = 1;
+		osc.enclosingRect = new Rect(-20, -15, 150, 150);
+		//osc.enclosingRect = new Rect(-10, -10, 20, 20);
+		//osc.enclosingRect = new Rect(0, 0, 15, 15);
+		//osc.enclosingRect = new Rect(0, 0, 1, 1);
 		
 		lbc.osc = osc;
 		lbc.spawnRect = new Rect(-8, -8, 30, 30);
 		//lbc.spawnRect = new Rect(-10, -10, 20, 20);
+		//lbc.spawnRect = new Rect(0, 0, 30, 30);
 		
 		RestrictionSet rs1 = new RestrictionSet(4, false, false, false, false);
 		RestrictionSet rs2 = new RestrictionSet(4, true, false, false, false);
 		
 		ExactRoomProvider mrp = new ExactRoomProvider();
-		mrp.addAll(Tmx.GetRoomsOfType(RoomType.COMMON));
-		//mrp.addAll(Tmx.GetRoomsOfTypeFitting(RoomType.COMMON, rs1));
+		//mrp.addAll(Tmx.GetRoomsOfType(RoomType.COMMON));
+		mrp.addAll(Tmx.GetRoomsOfTypeFitting(RoomType.COMMON, rs1));
         
 		ExactRoomProviderValidator msrge = new ExactRoomProviderValidator( mrp );
 		List<Room> result = lb.generate(lbc, mrp, msrge);
 		List<Room> tmp2 = new LinkedList<Room>();
 		tmp2.addAll(result);
 
-		int k = 1;
+		float pos = 0f;
+		float k = 0.0001f;
 		
-		while( result.size() < 10 )
+		while( result.size() < 40 )
 		{
-			lbc.spawnRect.position.x -= k;
+			//if( pos > 10 ) k = -k;
+			//if( pos < -10 ) k = -k;
+			//pos += k;
+			//lbc.spawnRect.position.x -= k;
+			//osc.enclosingRect.position.x -= k;
 			mrp = new ExactRoomProvider();
-			mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs1));
+			//mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs1));
+			mrp.addAll(Tmx.GetRoomsOfTypeFitting(RoomType.COMMON, rs1));
 			msrge = new ExactRoomProviderValidator( mrp );
 			//result = addNotAdded(result, tmp2);
 			result = lb.generate(lbc, mrp, msrge, result);
 		}
 
-		System.out.println(result.size());
+		Logger.Log(result.size());
 		
 		List<Room> tmp = new LinkedList<Room>();
 		tmp.addAll(result);
 		
-		while( result.size() < 25 )
+		while( result.size() < 80 )
 		{
-			//lbc.spawnRect.position.x -= k;
+			Logger.Log(lbc.spawnRect.position);
+			lbc.spawnRect.position.x -= k;
+			lbc.spawnRect.position.y -= k;
+			osc.enclosingRect.position.x -= k;
+			osc.enclosingRect.position.y -= k;
 			mrp = new ExactRoomProvider();
-			//mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs2));
-			mrp.addAll(Tmx.GetRoomsOfTypeFitting(RoomType.COMMON, rs2));
+			mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs2));
+			//mrp.addAll(Tmx.GetRoomsOfTypeFitting(RoomType.COMMON, rs2));
 			msrge = new ExactRoomProviderValidator( mrp );
 			result = addNotAdded(result, tmp);
+			Logger.Log("enter");
 			result = lb.generate(lbc, mrp, msrge, result);
+			Logger.Log("quit");
+			if( false ) //result.size() > 40 )
+			{
+				(new RectDebugger(result, 800, 600)).Show();
+				try {
+					System.in.read();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 
 		/*
