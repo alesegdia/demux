@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="8" tileheight="8" nextobjectid="69">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="8" tileheight="8" nextobjectid="73">
  <properties>
   <property name="constraint" value="0000"/>
   <property name="links" value="0-0-TLRB"/>
-  <property name="needed" value="3"/>
+  <property name="needed" value="1"/>
   <property name="size" value="1x1"/>
   <property name="type" value="common"/>
  </properties>

@@ -3,7 +3,7 @@
  <properties>
   <property name="constraint" value="1000"/>
   <property name="links" value="0-3-T 0-2-LR 0-0-LRB"/>
-  <property name="needed" value="2"/>
+  <property name="needed" value="3"/>
   <property name="size" value="1x4"/>
   <property name="type" value="common"/>
  </properties>
