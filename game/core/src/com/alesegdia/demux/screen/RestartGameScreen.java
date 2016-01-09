@@ -7,6 +7,7 @@ import com.alesegdia.demux.GdxGame;
 import com.alesegdia.demux.map.MultipleConstraintComposer;
 import com.alesegdia.demux.map.SingleConstraintComposer;
 import com.alesegdia.troidgen.IWorldComposer;
+import com.alesegdia.troidgen.renderer.RectDebugger;
 import com.alesegdia.troidgen.room.Room;
 import com.badlogic.gdx.Screen;
 
