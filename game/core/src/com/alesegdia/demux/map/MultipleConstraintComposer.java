@@ -5,9 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.demux.assets.Tmx;
+import com.alesegdia.troidgen.BiggestGroupFilter;
 import com.alesegdia.troidgen.ExactRoomProvider;
 import com.alesegdia.troidgen.ExactRoomProviderValidator;
 import com.alesegdia.troidgen.GraphBuilder;
+import com.alesegdia.troidgen.GroupExtractor;
+import com.alesegdia.troidgen.IRoomGroupFilter;
 import com.alesegdia.troidgen.IRoomProvider;
 import com.alesegdia.troidgen.IWorldComposer;
 import com.alesegdia.troidgen.LayoutBuilder;
@@ -16,6 +19,7 @@ import com.alesegdia.troidgen.LinkBuilder;
 import com.alesegdia.troidgen.MinSizeRoomGroupValidator;
 import com.alesegdia.troidgen.OverlapSolverConfig;
 import com.alesegdia.troidgen.RandomRoomProvider;
+import com.alesegdia.troidgen.RoomRestrictionValidator;
 import com.alesegdia.troidgen.renderer.RectDebugger;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
@@ -23,9 +27,12 @@ import com.alesegdia.troidgen.room.RoomType;
 import com.alesegdia.troidgen.util.Logger;
 import com.alesegdia.troidgen.util.Rect;
 import com.alesegdia.troidgen.util.UpperMatrix2D;
+import com.alesegdia.troidgen.util.Util;
 
 public class MultipleConstraintComposer implements IWorldComposer {
 	
+	public Room spawnRoom;
+
 	@Override
 	public List<Room> compose(List<Room> fixed) {
 
@@ -64,7 +71,7 @@ public class MultipleConstraintComposer implements IWorldComposer {
 		float pos = 0f;
 		float k = 0.0001f;
 		
-		while( result.size() < 40 )
+		while( result.size() < 30 )
 		{
 			//if( pos > 10 ) k = -k;
 			//if( pos < -10 ) k = -k;
@@ -84,7 +91,7 @@ public class MultipleConstraintComposer implements IWorldComposer {
 		List<Room> tmp = new LinkedList<Room>();
 		tmp.addAll(result);
 		
-		while( result.size() < 80 )
+		while( result.size() < 60 )
 		{
 			Logger.Log(lbc.spawnRect.position);
 			lbc.spawnRect.position.x -= k;
@@ -111,40 +118,9 @@ public class MultipleConstraintComposer implements IWorldComposer {
 			}
 		}
 
-		/*
-		{
-			lbc.spawnRect.position.x += k;
-			mrp = new ExactRoomProvider();
-			mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs1));
-			msrge = new ExactRoomProviderValidator( mrp );
-			result = lb.generate(lbc, mrp, msrge, result);
-		}
-
-		{
-			lbc.spawnRect.position.y -= k;
-			mrp = new ExactRoomProvider();
-			mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs1));
-			msrge = new ExactRoomProviderValidator( mrp );
-			result = lb.generate(lbc, mrp, msrge, result);
-		}
-
-		{
-			lbc.spawnRect.position.y += k;
-			mrp = new ExactRoomProvider();
-			mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs1));
-			msrge = new ExactRoomProviderValidator( mrp );
-			result = lb.generate(lbc, mrp, msrge, result);
-		}
-
-		*/
-		GraphBuilder gb = new GraphBuilder();
-		UpperMatrix2D<Float> m = gb.build(result);
-		
-		LinkBuilder linksb = new LinkBuilder();
-		linksb.generate(result);
-
 		RectDebugger rd = new RectDebugger(result, 800, 600, osc.enclosingRect);
 		rd.Show();
+
 		
 		return result;
 	}
