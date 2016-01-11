@@ -1,7 +1,10 @@
 package com.alesegdia.demux.assets;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Gfx {
 
@@ -14,6 +17,7 @@ public class Gfx {
 	public static Spritesheet entranceSheet;
 	public static Animation[] entranceAnims;
 	public static Animation playerDash;
+	public static TextureRegion playerBulletTexture;
 
 	public static void Initialize()
 	{
@@ -32,6 +36,10 @@ public class Gfx {
 		entranceAnims[2] = new Animation(0.2f, entranceSheet.get(2));
 		entranceAnims[3] = new Animation(0.2f, entranceSheet.get(3));
 		
+		Texture pt = new Texture(Gdx.files.internal("bala.png"));
+		playerBulletTexture = new TextureRegion();
+		playerBulletTexture.setRegion(pt);
+
 	}
 	
 }
