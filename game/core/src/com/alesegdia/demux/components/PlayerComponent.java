@@ -18,5 +18,7 @@ public class PlayerComponent extends Component{
 	public boolean superJump;
 	public Body platform = null;
 	
+	public boolean showMap = false;
+	
 
 }

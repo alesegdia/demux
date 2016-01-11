@@ -1,9 +1,14 @@
 package com.alesegdia.demux;
 
+import com.alesegdia.demux.components.AttackComponent;
+import com.alesegdia.demux.components.ShootComponent;
+import com.alesegdia.demux.components.WeaponComponent;
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.TilemapWrapper;
 import com.alesegdia.demux.components.ActiveComponent;
 import com.alesegdia.demux.components.AnimationComponent;
+import com.alesegdia.demux.components.BulletComponent;
+import com.alesegdia.demux.components.CountdownDestructionComponent;
 import com.alesegdia.demux.components.DashComponent;
 import com.alesegdia.demux.components.GraphicsComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
@@ -13,13 +18,17 @@ import com.alesegdia.demux.components.RoomLinkComponent;
 import com.alesegdia.demux.components.TransformComponent;
 import com.alesegdia.demux.ecs.Engine;
 import com.alesegdia.demux.ecs.Entity;
+import com.alesegdia.demux.physics.CollisionLayers;
 import com.alesegdia.demux.physics.Physics;
 import com.alesegdia.demux.systems.AnimationSystem;
+import com.alesegdia.demux.systems.AttackTriggeringSystem;
+import com.alesegdia.demux.systems.CountdownDestructionSystem;
 import com.alesegdia.demux.systems.DashingSystem;
 import com.alesegdia.demux.systems.DrawingSystem;
 import com.alesegdia.demux.systems.FlipSystem;
 import com.alesegdia.demux.systems.HumanControllerSystem;
 import com.alesegdia.demux.systems.MovementSystem;
+import com.alesegdia.demux.systems.ShootingSystem;
 import com.alesegdia.demux.systems.UpdatePhysicsSystem;
 import com.alesegdia.troidgen.room.Direction;
 import com.alesegdia.troidgen.room.Link;
@@ -28,6 +37,7 @@ import com.alesegdia.troidgen.room.Room;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 
@@ -44,6 +54,7 @@ public class GameWorld {
 	}
 
 	Entity player;
+	BulletConfigs bulletCfgs;
 
 	private CameraScroller scroll;
 
@@ -52,13 +63,24 @@ public class GameWorld {
 		this.cam = cam;
 		engine = new Engine();
 		engine.addSystem(new HumanControllerSystem());
+		engine.addSystem(new AttackTriggeringSystem());
+		engine.addSystem(new ShootingSystem());
+
 		engine.addSystem(new AnimationSystem());
-		engine.addSystem(new UpdatePhysicsSystem());
 		engine.addSystem(new DashingSystem());
 		engine.addSystem(new MovementSystem());
+
+		engine.addSystem(new CountdownDestructionSystem());
+		engine.addSystem(physics.physicsSystem);
+		engine.addSystem(new UpdatePhysicsSystem());
+
 		engine.addSystem(new FlipSystem());
 		engine.addSystem(new DrawingSystem(batch), true);
-		engine.addSystem(physics.physicsSystem);
+		
+
+		bulletCfgs = new BulletConfigs();
+
+		instance = this;
 	}
 	
 	public void clear()
@@ -123,6 +145,17 @@ public class GameWorld {
 		
 		DashComponent dc = (DashComponent) player.addComponent(new DashComponent());
 		
+		AttackComponent atc = (AttackComponent) player.addComponent(new AttackComponent());
+		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
+		WeaponComponent wep = (WeaponComponent) player.addComponent(new WeaponComponent());
+		
+		atc.attackCooldown = 2f;
+	
+		sc.bulletConfigs = BulletConfigs.playerDefaultBEList;
+		wep.weaponModel = BulletConfigs.defaultGun;
+		atc.attackCooldown = wep.weaponModel.rate;
+		sc.bulletConfigs = wep.weaponModel.bulletEntries;
+
 		
 		engine.addEntity(player);
 	}
@@ -197,6 +230,57 @@ public class GameWorld {
 		
 		engine.addEntity(entrance);		
 	}
+	
+	public Entity makeBullet( float x, float y, float w, float h, Vector2 dir, boolean player, TextureRegion tr,
+			float destructionTime, int power, boolean trespassingEnabled ) {
+		Entity e = new Entity();
+
+		BulletComponent bc = (BulletComponent) e.addComponent(new BulletComponent());
+		bc.power = power;
+		bc.trespassingEnabled = trespassingEnabled;
+		
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+		gc.drawElement = tr;
+		gc.sprite = new Sprite(gc.drawElement);
+		gc.allowFlip = false;
+		
+		TransformComponent posc = (TransformComponent) e.addComponent(new TransformComponent());
+		posc.position = new Vector2(x,y);
+		posc.offset.x = 0;
+		posc.offset.y = 0;
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		short cat, mask, group;
+		if( player ) {
+			cat = CollisionLayers.CATEGORY_PLBULLETS;
+			mask = CollisionLayers.MASK_PLBULLETS;
+			group = CollisionLayers.GROUP_PLBULLETS;
+		} else {
+			cat = CollisionLayers.CATEGORY_ENBULLETS;
+			mask = CollisionLayers.MASK_ENBULLETS;
+			group = CollisionLayers.GROUP_ENBULLETS;
+		}
+		phc.body = physics.createBulletBody(x, y, w/4, h/4, cat, mask, group);
+		phc.body.setTransform(x, y, (float) Math.toRadians(dir.angle()));
+		phc.body.setUserData(e);
+		
+		phc.body.setLinearVelocity(dir);
+		
+		LinearVelocityComponent lvc = (LinearVelocityComponent) e.addComponent(new LinearVelocityComponent());		
+		lvc.speed.set(0.5f,0);
+		lvc.linearVelocity.set(dir);
+
+		CountdownDestructionComponent cdc = (CountdownDestructionComponent) e.addComponent(new CountdownDestructionComponent());
+		cdc.timeToLive = destructionTime;
+		
+		engine.addEntity(e);
+		
+		return e;
+	}
+	
+	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt, int power, boolean trespassingEnabled ) {
+		Entity e = makeBullet(x, y, w, h, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt, power, trespassingEnabled);
+		return e;
+	}
 
 	public void setCam() {
 		cam.position.x = playerPositionComponent.position.x;
@@ -237,5 +321,6 @@ public class GameWorld {
 			}
 		}
 	}
+
 
 }

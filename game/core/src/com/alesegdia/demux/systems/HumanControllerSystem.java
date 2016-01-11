@@ -4,6 +4,7 @@ import com.alesegdia.demux.ecs.Entity;
 import com.alesegdia.demux.ecs.EntitySystem;
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.components.AnimationComponent;
+import com.alesegdia.demux.components.AttackComponent;
 import com.alesegdia.demux.components.DashComponent;
 import com.alesegdia.demux.components.GraphicsComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
@@ -46,13 +47,13 @@ public class HumanControllerSystem extends EntitySystem {
 		if( Gdx.input.isKeyJustPressed(Input.Keys.E) ) 
 		{
 			dc.dashTimer = 0.3f;
-			dc.dashIntensity = 8;
+			dc.dashIntensity = 6;
 		}
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) ) 
 		{
 			dc.dashTimer = 0.3f;
-			dc.dashIntensity = -8;
+			dc.dashIntensity = -6;
 		}
 		
 		if( !phc.grounded )
@@ -84,7 +85,7 @@ public class HumanControllerSystem extends EntitySystem {
 		float vx = 5;
 		if( plc.superJump )
 		{
-			vx = 10;
+			vx = 5;
 		}
 		lvc.linearVelocity.x = dx * vx * lvc.speed.x;
 		lvc.linearVelocity.y = prevYlinear;
@@ -121,6 +122,14 @@ public class HumanControllerSystem extends EntitySystem {
 		if( plc.superJump )
 		{
 			gc.shadowEffectEnabled = true;
+		}
+		
+		AttackComponent atc = (AttackComponent) e.getComponent(AttackComponent.class);
+		atc.wantToAttack = Gdx.input.isKeyJustPressed(Input.Keys.C);
+		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.TAB) )
+		{
+			plc.showMap = !plc.showMap;
 		}
 		
 	}

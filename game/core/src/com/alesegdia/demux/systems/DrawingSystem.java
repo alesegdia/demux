@@ -37,12 +37,14 @@ public class DrawingSystem extends EntitySystem {
 				gc.isFlipped = false;
 			}
 		}
+		
+		if( e.name != null ) System.out.println(e.name);
 		if( gc.hasShadowEffect )
 		{
 			gc.nextBufferCopy -= Gdx.graphics.getDeltaTime();
 			if( gc.nextBufferCopy <= 0 )
 			{
-				gc.nextBufferCopy = 0.1f;
+				gc.nextBufferCopy = 0.05f;
 				Sprite sprite = gc.shadowBuffer[gc.currentShadowIndex].sprite;
 				sprite.setScale(GameConfig.PIXELS_TO_METERS);
 				sprite.setRotation(pc.angle);
@@ -63,7 +65,7 @@ public class DrawingSystem extends EntitySystem {
 			{
 				if( sbe.active )
 				{
-					sbe.alpha -= Gdx.graphics.getDeltaTime()/2f;
+					sbe.alpha -= Gdx.graphics.getDeltaTime();
 					if( sbe.alpha < 0 ) sbe.alpha = 0;
 					sbe.sprite.draw(spriteBatch, sbe.alpha);
 				}
