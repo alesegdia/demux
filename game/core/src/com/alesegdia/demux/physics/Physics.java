@@ -1,5 +1,6 @@
 package com.alesegdia.demux.physics;
 
+import com.alesegdia.demux.physics.CollisionLayers;
 import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.systems.PhysicsSystem;
 import com.badlogic.gdx.graphics.Camera;
@@ -137,6 +138,29 @@ public class Physics {
 		createFixture(b, cs, CollisionLayers.CATEGORY_MAP, CollisionLayers.MASK_MAP, CollisionLayers.GROUP_MAP, 1f, 0f, 0f);
 		cs.dispose();
 		return b;
+	}
+	
+	public Body createBulletBody( float x, float y, float w, float h, short cat, short mask, short group ) {
+		return createDirectionalBullet(x,y,w,h,0,cat,mask,group);
+	}
+	
+	public Body createDirectionalBullet( float x, float y, float w, float h, float angle, short cat, short mask, short group ) {
+		Body b = createBody(x, y, true);
+		b.setBullet(true);
+		CircleShape cs = new CircleShape();
+		cs.setRadius(w * GameConfig.PIXELS_TO_METERS);
+		/*
+		PolygonShape ps = new PolygonShape();
+		ps.setAsBox(w * GameConfig.PIXELS_TO_METERS, h * GameConfig.PIXELS_TO_METERS);
+		*/
+		createFixture(b, cs, cat, mask, group, 0, 0, 0, true);
+		b.setGravityScale(0);
+		cs.dispose();
+		return b;
+	}
+	
+	public Body createPlayerBulletBody( float x, float y ) {
+		return createBulletBody(x, y, 5, 5, CollisionLayers.CATEGORY_PLBULLETS, CollisionLayers.MASK_PLBULLETS, CollisionLayers.GROUP_PLBULLETS);
 	}
 
 	public void Dispose() {
