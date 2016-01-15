@@ -3,11 +3,11 @@ package com.alesegdia.demux;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alesegdia.troidgen.util.Lerper;
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.components.ShootComponent.BulletEntry;
 import com.alesegdia.demux.components.ShootComponent.BulletModel;
 import com.alesegdia.demux.components.WeaponComponent.WeaponModel;
+import com.alesegdia.demux.interp.Lerper;
 import com.badlogic.gdx.math.Vector2;
 
 public class BulletConfigs {
