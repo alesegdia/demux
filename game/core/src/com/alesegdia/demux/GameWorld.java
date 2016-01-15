@@ -10,6 +10,7 @@ import com.alesegdia.demux.components.AnimationComponent;
 import com.alesegdia.demux.components.BulletComponent;
 import com.alesegdia.demux.components.CountdownDestructionComponent;
 import com.alesegdia.demux.components.DashComponent;
+import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.GraphicsComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PhysicsComponent;
@@ -26,6 +27,7 @@ import com.alesegdia.demux.systems.CountdownDestructionSystem;
 import com.alesegdia.demux.systems.DashingSystem;
 import com.alesegdia.demux.systems.DrawingSystem;
 import com.alesegdia.demux.systems.FlipSystem;
+import com.alesegdia.demux.systems.GaugeSystem;
 import com.alesegdia.demux.systems.HumanControllerSystem;
 import com.alesegdia.demux.systems.MovementSystem;
 import com.alesegdia.demux.systems.ShootingSystem;
@@ -64,6 +66,7 @@ public class GameWorld {
 		engine = new Engine();
 		engine.addSystem(new HumanControllerSystem());
 		engine.addSystem(new AttackTriggeringSystem());
+		engine.addSystem(new GaugeSystem());
 		engine.addSystem(new ShootingSystem());
 
 		engine.addSystem(new AnimationSystem());
@@ -128,7 +131,7 @@ public class GameWorld {
 		}
 		else
 		{
-			PlayerComponent plyc = (PlayerComponent) player.addComponent(new PlayerComponent());
+			player.addComponent(new PlayerComponent());
 		}
 		
 		LinearVelocityComponent lvc = (LinearVelocityComponent) player.addComponent(new LinearVelocityComponent());		
@@ -143,7 +146,7 @@ public class GameWorld {
 		ActiveComponent actc = (ActiveComponent) player.addComponent(new ActiveComponent());
 		actc.isActive = true;
 		
-		DashComponent dc = (DashComponent) player.addComponent(new DashComponent());
+		player.addComponent(new DashComponent());
 		
 		AttackComponent atc = (AttackComponent) player.addComponent(new AttackComponent());
 		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
@@ -151,12 +154,19 @@ public class GameWorld {
 		
 		atc.attackCooldown = 2f;
 	
-		sc.bulletConfigs = BulletConfigs.playerDefaultBEList;
-		wep.weaponModel = BulletConfigs.defaultGun;
-		atc.attackCooldown = wep.weaponModel.rate;
-		sc.bulletConfigs = wep.weaponModel.bulletEntries;
+		for( int i = 0; i < wep.weaponModel.length; i++ )
+		{
+			wep.weaponModel[i] = new WeaponStats(i, i, i, i).makeModel(); //new WeaponComponent.WeaponModel(BulletConfigs.defaultGun);
+		}
 
+		// change weapon
+		atc.attackCooldown = wep.weaponModel[0].rate;
+		sc.bulletConfigs = wep.weaponModel[0].bulletEntries;
 		
+		GaugeComponent gac = (GaugeComponent) player.addComponent(new GaugeComponent());
+		gac.maxGauge = 300;
+		gac.currentGauge = 300;
+
 		engine.addEntity(player);
 	}
 	
@@ -232,7 +242,7 @@ public class GameWorld {
 	}
 	
 	public Entity makeBullet( float x, float y, float w, float h, Vector2 dir, boolean player, TextureRegion tr,
-			float destructionTime, int power, boolean trespassingEnabled ) {
+			float destructionTime, float power, boolean trespassingEnabled ) {
 		Entity e = new Entity();
 
 		BulletComponent bc = (BulletComponent) e.addComponent(new BulletComponent());
@@ -277,14 +287,14 @@ public class GameWorld {
 		return e;
 	}
 	
-	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt, int power, boolean trespassingEnabled ) {
+	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt, float power, boolean trespassingEnabled ) {
 		Entity e = makeBullet(x, y, w, h, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt, power, trespassingEnabled);
 		return e;
 	}
 
 	public void setCam() {
 		cam.position.x = playerPositionComponent.position.x;
-		cam.position.y = playerPositionComponent.position.y + 2;
+		cam.position.y = playerPositionComponent.position.y;
 		this.scroll.step();
 	}
 	
