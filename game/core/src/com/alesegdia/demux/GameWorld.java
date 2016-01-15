@@ -148,20 +148,29 @@ public class GameWorld {
 		
 		player.addComponent(new DashComponent());
 		
-		AttackComponent atc = (AttackComponent) player.addComponent(new AttackComponent());
-		ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
-		WeaponComponent wep = (WeaponComponent) player.addComponent(new WeaponComponent());
-		
-		atc.attackCooldown = 2f;
-	
-		for( int i = 0; i < wep.weaponModel.length; i++ )
+		if( prd.ac != null && prd.sc != null && prd.wc != null )
 		{
-			wep.weaponModel[i] = new WeaponStats(i, i, i, i).makeModel(); //new WeaponComponent.WeaponModel(BulletConfigs.defaultGun);
+			player.addComponent(prd.ac);
+			player.addComponent(prd.sc);
+			player.addComponent(prd.wc);
 		}
-
-		// change weapon
-		atc.attackCooldown = wep.weaponModel[0].rate;
-		sc.bulletConfigs = wep.weaponModel[0].bulletEntries;
+		else
+		{
+			AttackComponent atc = (AttackComponent) player.addComponent(new AttackComponent());
+			ShootComponent sc = (ShootComponent) player.addComponent(new ShootComponent());
+			WeaponComponent wep = (WeaponComponent) player.addComponent(new WeaponComponent());
+			
+			atc.attackCooldown = 2f;
+		
+			for( int i = 0; i < wep.weaponModel.length; i++ )
+			{
+				wep.weaponModel[i] = new WeaponStats(i, i, i, i).makeModel(); //new WeaponComponent.WeaponModel(BulletConfigs.defaultGun);
+			}
+	
+			// change weapon
+			atc.attackCooldown = wep.weaponModel[0].rate;
+			sc.bulletConfigs = wep.weaponModel[0].bulletEntries;
+		}
 		
 		GaugeComponent gac = (GaugeComponent) player.addComponent(new GaugeComponent());
 		gac.maxGauge = 300;

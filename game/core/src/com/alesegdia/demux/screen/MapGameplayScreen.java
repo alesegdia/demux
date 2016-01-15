@@ -8,9 +8,12 @@ import com.alesegdia.demux.PlayerRespawnData;
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.TilemapWrapper;
 import com.alesegdia.demux.assets.Tmx;
+import com.alesegdia.demux.components.AttackComponent;
 import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PlayerComponent;
+import com.alesegdia.demux.components.ShootComponent;
+import com.alesegdia.demux.components.WeaponComponent;
 import com.alesegdia.demux.physics.MapBodyBuilder;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
@@ -129,6 +132,11 @@ public class MapGameplayScreen implements Screen {
 			prd.plc = plc;
 			prd.prevlvc = ((LinearVelocityComponent) gw.getPlayer().getComponent(LinearVelocityComponent.class)).linearVelocity;
 			prd.spawnPos = pos;
+			
+			prd.ac = (AttackComponent) gw.getPlayer().getComponent(AttackComponent.class);
+			prd.sc = (ShootComponent) gw.getPlayer().getComponent(ShootComponent.class);
+			prd.wc = (WeaponComponent) gw.getPlayer().getComponent(WeaponComponent.class);
+			
 			this.reset(plc.gotoRoom.connectedRoom, prd);			
 		}
 		
