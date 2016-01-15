@@ -11,9 +11,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public class WeaponStats {
 
+	public int powerLimit = 4;
 	public int power;
+
+	public int rateLimit = 4;
 	public int rate;
+
+	public int ttlLimit = 4;
 	public int ttl;
+
+	public int speedLimit = 4;
 	public int speed;
 	
 	// triple gun, sine gun, 5-gun

@@ -145,7 +145,7 @@ public class MenuScreen implements Screen {
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE) )
 		{
-			if( this.selectedAttr == 0 )
+			if( this.selectedAttr == 0 && this.editingWeaponStats.power + 1 <= this.editingWeaponStats.powerLimit )
 			{
 				int points_to_upgrade = this.editingWeaponStats.power;
 				points_to_upgrade++;
@@ -156,7 +156,7 @@ public class MenuScreen implements Screen {
 				}
 			}
 
-			if( this.selectedAttr == 1 )
+			if( this.selectedAttr == 1 && this.editingWeaponStats.ttl + 1 <= this.editingWeaponStats.ttlLimit )
 			{
 				int points_to_upgrade = this.editingWeaponStats.ttl;
 				points_to_upgrade++;
@@ -167,7 +167,7 @@ public class MenuScreen implements Screen {
 				}
 			}
 
-			if( this.selectedAttr == 2 )
+			if( this.selectedAttr == 2 && this.editingWeaponStats.speed + 1 <= this.editingWeaponStats.speedLimit )
 			{
 				int points_to_upgrade = this.editingWeaponStats.speed;
 				points_to_upgrade++;
@@ -178,7 +178,7 @@ public class MenuScreen implements Screen {
 				}
 			}
 
-			if( this.selectedAttr == 3 )
+			if( this.selectedAttr == 3 && this.editingWeaponStats.rate + 1 <= this.editingWeaponStats.rateLimit )
 			{
 				int points_to_upgrade = this.editingWeaponStats.rate;
 				points_to_upgrade++;
