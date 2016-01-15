@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Gfx {
@@ -18,6 +19,9 @@ public class Gfx {
 	public static Animation[] entranceAnims;
 	public static Animation playerDash;
 	public static TextureRegion playerBulletTexture;
+	
+	public static Texture menuTexture;
+	public static Sprite menuSprite;
 
 	public static void Initialize()
 	{
@@ -40,6 +44,13 @@ public class Gfx {
 		playerBulletTexture = new TextureRegion();
 		playerBulletTexture.setRegion(pt);
 
+		menuTexture = new Texture(Gdx.files.internal("menu.png"));
+		
+		menuSprite = new Sprite();
+		menuSprite.setTexture(menuTexture);
+		menuSprite.setRegion(new TextureRegion(menuTexture));
+		menuSprite.setScale(10);
+		menuSprite.setPosition(0, 0);
 	}
 	
 }
