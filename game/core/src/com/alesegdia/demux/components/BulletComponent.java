@@ -4,7 +4,7 @@ import com.alesegdia.demux.ecs.Component;
 
 public class BulletComponent extends Component {
 
-	public int power;
+	public float power;
 	public boolean trespassingEnabled = false;
 	
 }

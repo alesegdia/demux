@@ -58,6 +58,7 @@ public class ShootingSystem extends EntitySystem {
 						dir = new Vector2(plpc.position).sub(pc.position).nor().scl(bm.speed);
 					} else {
 						dir = new Vector2(bm.dir);
+						dir.nor();
 						dir.scl(bm.speed);
 						if( flip ) {
 							dir.x *= -1;

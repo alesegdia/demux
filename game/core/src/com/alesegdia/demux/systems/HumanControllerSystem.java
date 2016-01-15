@@ -11,7 +11,10 @@ import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PhysicsComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.ShadowBufferEntry;
+import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.TransformComponent;
+import com.alesegdia.demux.components.WeaponComponent;
+import com.alesegdia.demux.components.WeaponComponent.WeaponModel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
@@ -125,13 +128,30 @@ public class HumanControllerSystem extends EntitySystem {
 		}
 		
 		AttackComponent atc = (AttackComponent) e.getComponent(AttackComponent.class);
-		atc.wantToAttack = Gdx.input.isKeyJustPressed(Input.Keys.C);
+		atc.wantToAttack = Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isKeyPressed(Input.Keys.V);
 		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.TAB) )
 		{
 			plc.showMap = !plc.showMap;
 		}
 		
+		// change weapon
+		ShootComponent sc = (ShootComponent) e.getComponent(ShootComponent.class);
+		WeaponComponent wep = (WeaponComponent) e.getComponent(WeaponComponent.class);
+		changeWeapon( Input.Keys.NUM_1, wep.weaponModel[0], atc, sc );		
+		changeWeapon( Input.Keys.NUM_2, wep.weaponModel[1], atc, sc );		
+		changeWeapon( Input.Keys.NUM_3, wep.weaponModel[2], atc, sc );		
+		changeWeapon( Input.Keys.NUM_4, wep.weaponModel[3], atc, sc );		
+		
+	}
+	
+	public void changeWeapon( int keycode, WeaponModel wm, AttackComponent atc, ShootComponent sc )
+	{
+		if( Gdx.input.isKeyJustPressed(keycode) )
+		{
+			atc.attackCooldown = wm.rate;
+			sc.bulletConfigs = wm.bulletEntries;
+		}
 	}
 
 	@Override

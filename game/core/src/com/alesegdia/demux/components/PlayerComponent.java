@@ -19,6 +19,5 @@ public class PlayerComponent extends Component{
 	public Body platform = null;
 	
 	public boolean showMap = false;
-	
-
+	public int accumulatedAbilityPoints = 180;
 }
