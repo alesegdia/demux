@@ -53,7 +53,7 @@ public class RestartGameScreen implements Screen {
 		
 		List<Room> start = rgf.filter(startRooms);
 		Util.shuffle(start);
-		
+
 		Room r = start.get(0);
 
         g.tilemapScreen.reset(r);

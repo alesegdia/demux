@@ -5,14 +5,17 @@ import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.GameWorld;
 import com.alesegdia.demux.GdxGame;
 import com.alesegdia.demux.PlayerRespawnData;
+import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.TilemapWrapper;
 import com.alesegdia.demux.assets.Tmx;
+import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.physics.MapBodyBuilder;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -24,8 +27,8 @@ public class MapGameplayScreen implements Screen {
 
 	private GdxGame g;
 	private TilemapWrapper currentMap;
-	private GameWorld gw;
-	private Room currentRoom;
+	public GameWorld gw;
+	Room currentRoom;
 	private boolean physicsDebug = false;
 
 	public MapGameplayScreen( GdxGame g )
@@ -61,6 +64,8 @@ public class MapGameplayScreen implements Screen {
 		gw.buildMapEntities(startRoom);
 		
 		gw.resetScroller(this.currentMap.tilemap);
+		
+		startRoom.isVisited = true;
 		
 	}
 	
@@ -126,43 +131,19 @@ public class MapGameplayScreen implements Screen {
 			prd.spawnPos = pos;
 			this.reset(plc.gotoRoom.connectedRoom, prd);			
 		}
-
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		
-		g.srend.setAutoShapeType(true);
-		g.srend.begin(ShapeType.Filled);
-		
-		if( plc.showMap )
+		if( Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) )
 		{
-			for( Room r : g.restartScreen.roomLayout )
-			{
-				if( r == this.currentRoom )
-				{
-					g.srend.setColor(1,1,1,((float) Math.sin(Gdx.graphics.getFrameId()/10f) + 1f) / 2f );
-				}
-				else
-				{
-					if( r.rinfo.restriction.equals(new RestrictionSet(4, false, false, false, false)) )
-					{
-						g.srend.setColor(0,1,0,0.5f);
-					}
-					else if( r.rinfo.restriction.equals(new RestrictionSet(4, true, false, false, false)) )
-					{
-						g.srend.setColor(0,0,1,0.5f);
-					}
-					else
-					{
-						g.srend.setColor(1,1,1,0.5f);
-					}
-				}
-				g.srend.rect(150 + r.position.x * 16, 150 + r.position.y * 16, r.size.x * 16, r.size.y * 16);
-			}
-		}		
-
-		g.srend.end();
-		Gdx.gl.glDisable(GL20.GL_BLEND);
-
+			System.out.println("going to menu screen");
+			g.setScreen(g.menuScreen);
+		}
+		
+		g.textCam.update();
+		g.batch.setProjectionMatrix(g.textCam.combined);
+		g.batch.begin();
+		GaugeComponent gac = (GaugeComponent) gw.getPlayer().getComponent(GaugeComponent.class);
+		g.font.draw(g.batch, gac.gauge(), 0, 20);
+		g.batch.end();
 	}
 
 	@Override
