@@ -7,9 +7,12 @@ import com.alesegdia.demux.GdxGame;
 import com.alesegdia.demux.WeaponStats;
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.components.AttackComponent;
+import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.ShootComponent.BulletEntry;
+import com.alesegdia.demux.components.StaminaComponent;
+import com.alesegdia.demux.components.UpgradesComponent;
 import com.alesegdia.demux.components.WeaponComponent;
 import com.alesegdia.demux.components.WeaponComponent.WeaponModel;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
@@ -111,6 +114,34 @@ public class MenuScreen implements Screen {
 		}
 
 		Gdx.gl.glDisable(GL20.GL_BLEND);
+		
+		UpgradesComponent uc = (UpgradesComponent) g.tilemapScreen.gw.getPlayer().getComponent(UpgradesComponent.class);
+		g.batch.setProjectionMatrix(g.menuCam.combined);
+		g.batch.begin();
+
+		//uc.hasBinary = uc.hasTrivium = uc.hasWavegun = uc.hasDemux = uc.hasDash = uc.hasSJump = true;
+		if( uc.hasBinary ) g.batch.draw(Gfx.pickupsSheet.get(8), 14, 66);
+		if( uc.hasTrivium ) g.batch.draw(Gfx.pickupsSheet.get(3), 24, 66);
+		if( uc.hasWavegun ) g.batch.draw(Gfx.pickupsSheet.get(4), 34, 66);
+		if( uc.hasDemux ) g.batch.draw(Gfx.pickupsSheet.get(5), 44, 66);
+		if( uc.hasDash ) g.batch.draw(Gfx.pickupsSheet.get(2), 24, 58);
+		if( uc.hasSJump ) g.batch.draw(Gfx.pickupsSheet.get(6), 34, 58);
+		
+		g.batch.draw(Gfx.pickupsSheet.get(0), 14, 48);
+		g.batch.draw(Gfx.pickupsSheet.get(7), 14, 38);
+		g.batch.draw(Gfx.pickupsSheet.get(9), 14, 28);
+
+		g.batch.end();
+		
+		g.batch.setProjectionMatrix(g.textCam.combined);
+		g.batch.begin();
+		StaminaComponent stc = (StaminaComponent) g.tilemapScreen.gw.getPlayer().getComponent(StaminaComponent.class);
+		GaugeComponent gc = (GaugeComponent) g.tilemapScreen.gw.getPlayer().getComponent(GaugeComponent.class);
+		g.font.draw(g.batch, "83/100", 120, 254);
+		g.font.draw(g.batch, (stc.regenRate) + "/sec", 120, 206);
+		g.font.draw(g.batch, ((int)gc.regenRate) + "/sec", 120, 158);
+		g.batch.end();
+
 	}
 	
 	
@@ -209,10 +240,10 @@ public class MenuScreen implements Screen {
 	
 	private void handleInput()
 	{
-		handleNum(Input.Keys.NUM_1, 1);
-		handleNum(Input.Keys.NUM_2, 2);
-		handleNum(Input.Keys.NUM_3, 3);
-		handleNum(Input.Keys.NUM_4, 4);
+		handleNum(Input.Keys.NUM_1, 0);
+		handleNum(Input.Keys.NUM_2, 1);
+		handleNum(Input.Keys.NUM_3, 2);
+		handleNum(Input.Keys.NUM_4, 3);
 	}
 	
 	private int getPlayerAP()
