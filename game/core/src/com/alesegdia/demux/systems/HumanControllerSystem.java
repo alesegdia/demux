@@ -12,6 +12,7 @@ import com.alesegdia.demux.components.PhysicsComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.ShadowBufferEntry;
 import com.alesegdia.demux.components.ShootComponent;
+import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.TransformComponent;
 import com.alesegdia.demux.components.WeaponComponent;
 import com.alesegdia.demux.components.WeaponComponent.WeaponModel;
@@ -24,7 +25,7 @@ public class HumanControllerSystem extends EntitySystem {
 	public HumanControllerSystem() {
 		super(PlayerComponent.class, PhysicsComponent.class,
 			  LinearVelocityComponent.class, AnimationComponent.class,
-			  GraphicsComponent.class);
+			  GraphicsComponent.class, StaminaComponent.class);
 	}
 	
 	@Override
@@ -34,6 +35,7 @@ public class HumanControllerSystem extends EntitySystem {
 		AnimationComponent ac = (AnimationComponent) e.getComponent(AnimationComponent.class);
 		PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
+		StaminaComponent stc = (StaminaComponent) e.getComponent(StaminaComponent.class);
 		
 		// TODO: use 3 raycasts to check for grounded
 		int dx = 0; int dy = 0;
@@ -47,16 +49,19 @@ public class HumanControllerSystem extends EntitySystem {
 		
 		DashComponent dc = (DashComponent) e.getComponent(DashComponent.class);
 
-		if( Gdx.input.isKeyJustPressed(Input.Keys.E) ) 
+		float DASH_COST = 10f;
+		if( Gdx.input.isKeyJustPressed(Input.Keys.E) && stc.current - DASH_COST >= 0 ) 
 		{
 			dc.dashTimer = 0.3f;
 			dc.dashIntensity = 6;
+			stc.current -= DASH_COST;
 		}
 		
-		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) ) 
+		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) && stc.current - DASH_COST >= 0 ) 
 		{
 			dc.dashTimer = 0.3f;
 			dc.dashIntensity = -6;
+			stc.current -= DASH_COST;
 		}
 		
 		if( !phc.grounded )
@@ -68,10 +73,12 @@ public class HumanControllerSystem extends EntitySystem {
 			if( phc.grounded ) {
 				plc.jumping = true;
 				lvc.doCap[1] = false;
-				if( dc.dashTimer > 0 )
+				float SUPERJUMP_COST = 10f;
+				if( dc.dashTimer > 0 && stc.current - SUPERJUMP_COST >= 0 )
 				{
 					prevYlinear = 8f;
 					plc.superJump = true;
+					stc.current -= SUPERJUMP_COST;
 				}
 				else
 				{
@@ -79,6 +86,9 @@ public class HumanControllerSystem extends EntitySystem {
 				}
 			}
 		}
+		
+		stc.current += stc.regenRate;
+		stc.current = Math.min(stc.max, stc.current + stc.regenRate * Gdx.graphics.getDeltaTime());
 		
 		if( plc.jumping ) {
 			lvc.doCap[1] = false;
@@ -138,19 +148,20 @@ public class HumanControllerSystem extends EntitySystem {
 		// change weapon
 		ShootComponent sc = (ShootComponent) e.getComponent(ShootComponent.class);
 		WeaponComponent wep = (WeaponComponent) e.getComponent(WeaponComponent.class);
-		changeWeapon( Input.Keys.NUM_1, wep.weaponModel[0], atc, sc );		
-		changeWeapon( Input.Keys.NUM_2, wep.weaponModel[1], atc, sc );		
-		changeWeapon( Input.Keys.NUM_3, wep.weaponModel[2], atc, sc );		
-		changeWeapon( Input.Keys.NUM_4, wep.weaponModel[3], atc, sc );		
+		changeWeapon( Input.Keys.NUM_1, wep, 0, atc, sc );		
+		changeWeapon( Input.Keys.NUM_2, wep, 1, atc, sc );		
+		changeWeapon( Input.Keys.NUM_3, wep, 2, atc, sc );		
+		changeWeapon( Input.Keys.NUM_4, wep, 3, atc, sc );		
 		
 	}
 	
-	public void changeWeapon( int keycode, WeaponModel wm, AttackComponent atc, ShootComponent sc )
+	public void changeWeapon( int keycode, WeaponComponent wep, int i, AttackComponent atc, ShootComponent sc )
 	{
 		if( Gdx.input.isKeyJustPressed(keycode) )
 		{
-			atc.attackCooldown = wm.rate;
-			sc.bulletConfigs = wm.bulletEntries;
+			atc.attackCooldown = wep.weaponModel[i].rate;
+			sc.bulletConfigs = wep.weaponModel[i].bulletEntries;
+			wep.selectedWeapon = i;
 		}
 	}
 

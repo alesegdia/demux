@@ -4,6 +4,7 @@ import com.alesegdia.demux.DirectionUtils;
 import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.GameWorld;
 import com.alesegdia.demux.GdxGame;
+import com.alesegdia.demux.PickupType;
 import com.alesegdia.demux.PlayerRespawnData;
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.TilemapWrapper;
@@ -13,6 +14,7 @@ import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.ShootComponent;
+import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.WeaponComponent;
 import com.alesegdia.demux.physics.MapBodyBuilder;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
@@ -69,6 +71,8 @@ public class MapGameplayScreen implements Screen {
 		gw.resetScroller(this.currentMap.tilemap);
 		
 		startRoom.isVisited = true;
+		
+		gw.makePickup(3, 2, PickupType.HEAL);
 		
 	}
 	
@@ -136,6 +140,8 @@ public class MapGameplayScreen implements Screen {
 			prd.ac = (AttackComponent) gw.getPlayer().getComponent(AttackComponent.class);
 			prd.sc = (ShootComponent) gw.getPlayer().getComponent(ShootComponent.class);
 			prd.wc = (WeaponComponent) gw.getPlayer().getComponent(WeaponComponent.class);
+			prd.gc = (GaugeComponent) gw.getPlayer().getComponent(GaugeComponent.class);
+			prd.stc = (StaminaComponent) gw.getPlayer().getComponent(StaminaComponent.class);
 			
 			this.reset(plc.gotoRoom.connectedRoom, prd);			
 		}
@@ -150,7 +156,9 @@ public class MapGameplayScreen implements Screen {
 		g.batch.setProjectionMatrix(g.textCam.combined);
 		g.batch.begin();
 		GaugeComponent gac = (GaugeComponent) gw.getPlayer().getComponent(GaugeComponent.class);
-		g.font.draw(g.batch, gac.gauge(), 0, 20);
+		StaminaComponent stc = (StaminaComponent) gw.getPlayer().getComponent(StaminaComponent.class);
+		g.font.draw(g.batch, gac.gauge() + " " + stc.stamina(), 0, 20);
+		
 		g.batch.end();
 	}
 
