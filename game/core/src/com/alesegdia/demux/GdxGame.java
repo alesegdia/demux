@@ -6,6 +6,7 @@ import com.alesegdia.demux.physics.Physics;
 import com.alesegdia.demux.screen.MapGameplayScreen;
 import com.alesegdia.demux.screen.MenuScreen;
 import com.alesegdia.demux.screen.RestartGameScreen;
+import com.alesegdia.demux.screen.SplashScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -33,6 +34,7 @@ public class GdxGame extends Game {
 	public MapGameplayScreen tilemapScreen;
 	public RestartGameScreen restartScreen;
 	public MenuScreen menuScreen;
+	public SplashScreen splashScreen;
 	
 	public Physics physics;
 	
@@ -70,7 +72,8 @@ public class GdxGame extends Game {
         tilemapScreen = new MapGameplayScreen(this);
         restartScreen = new RestartGameScreen(this);
         menuScreen = new MenuScreen(this);
-        setScreen(restartScreen);
+        splashScreen = new SplashScreen(this);
+        setScreen(splashScreen);
         
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("visitor1.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
