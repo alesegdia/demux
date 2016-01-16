@@ -1,5 +1,14 @@
 package com.alesegdia.demux.map;
 
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.alesegdia.demux.GameConfig;
+import com.alesegdia.demux.PickupEntry;
+import com.alesegdia.demux.PickupType;
+import com.alesegdia.demux.assets.Tmx;
+import com.alesegdia.troidgen.room.Room;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -44,6 +53,23 @@ public class MapPickupCollector {
 
 	private static Vector2 handleCircle(EllipseMapObject object) {
 		return new Vector2(object.getEllipse().x / ppt, object.getEllipse().y / ppt);
+	}
+
+	public static Hashtable<Room, List<PickupEntry>> buildRoomPickupHash(List<Room> result) {
+		Hashtable<Room, List<PickupEntry>> pickupMap = new Hashtable<Room, List<PickupEntry>>();
+		
+		for( Room r : result )
+		{
+			List<PickupEntry> lpes = new LinkedList<PickupEntry>();
+			PickupLocations pls = collect(Tmx.GetMap(r.rinfo.id).tilemap, GameConfig.METERS_TO_PIXELS);
+			for( Vector2 p : pls.abilityPickups )
+			{
+				lpes.add(new PickupEntry(p, PickupType.MakeRandom()));
+			}
+			pickupMap.put(r, lpes);
+		}
+		
+		return pickupMap;
 	}
 
 }
