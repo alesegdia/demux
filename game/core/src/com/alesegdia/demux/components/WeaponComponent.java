@@ -29,9 +29,11 @@ public class WeaponComponent extends Component {
 	}
 	
 	public WeaponModel[] weaponModel = new WeaponModel[8];
+	public int selectedWeapon = 0;
 
 	public float computeShootCost() {
-		return 10;
+		WeaponModel wm = weaponModel[selectedWeapon];
+		return wm.ws.computeShootCost();
 	}
 	
 }

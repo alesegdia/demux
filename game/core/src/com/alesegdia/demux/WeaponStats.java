@@ -11,16 +11,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public class WeaponStats {
 
-	public int powerLimit = 4;
+	public int powerLimit = 10;
 	public int power;
 
-	public int rateLimit = 4;
+	public int rateLimit = 10;
 	public int rate;
 
-	public int ttlLimit = 4;
+	public int ttlLimit = 10;
 	public int ttl;
 
-	public int speedLimit = 4;
+	public int speedLimit = 10;
 	public int speed;
 	
 	// triple gun, sine gun, 5-gun
@@ -60,6 +60,11 @@ public class WeaponStats {
 		wm.bulletEntries = bes;
 
 		return wm;
+	}
+
+	public float computeShootCost() {
+		System.out.println("computin");
+		return power + rate + speed + ttl;
 	}
 	
 }
