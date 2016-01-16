@@ -5,6 +5,10 @@ import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.WeaponComponent;
 import com.alesegdia.demux.components.PickupItemComponent;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.TilemapWrapper;
 import com.alesegdia.demux.components.ActiveComponent;
@@ -20,6 +24,7 @@ import com.alesegdia.demux.components.PickupEffectComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.RoomLinkComponent;
 import com.alesegdia.demux.components.TransformComponent;
+import com.alesegdia.demux.components.UpgradesComponent;
 import com.alesegdia.demux.ecs.Engine;
 import com.alesegdia.demux.ecs.Entity;
 import com.alesegdia.demux.physics.CollisionLayers;
@@ -35,11 +40,13 @@ import com.alesegdia.demux.systems.HumanControllerSystem;
 import com.alesegdia.demux.systems.MovementSystem;
 import com.alesegdia.demux.systems.PickupSystem;
 import com.alesegdia.demux.systems.ShootingSystem;
+import com.alesegdia.demux.systems.SineMovementSystem;
 import com.alesegdia.demux.systems.UpdatePhysicsSystem;
 import com.alesegdia.troidgen.room.Direction;
 import com.alesegdia.troidgen.room.Link;
 import com.alesegdia.troidgen.room.LinkInfo;
 import com.alesegdia.troidgen.room.Room;
+import com.alesegdia.troidgen.util.RNG;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -63,6 +70,19 @@ public class GameWorld {
 	BulletConfigs bulletCfgs;
 
 	private CameraScroller scroll;
+
+	public String notification;
+	public float notificationTTL = 0f;
+	
+	public class Notification
+	{
+		public Notification(String text, int ttl) {
+			this.text = text;
+			this.ttl = ttl;
+		}
+		public String text;
+		public float ttl;
+	}
 
 	public GameWorld( Physics physics, SpriteBatch batch, Camera cam ) {
 		this.physics = physics;
@@ -199,6 +219,15 @@ public class GameWorld {
 		{
 			player.addComponent(new StaminaComponent());
 		}
+		
+		if( prd.uc != null )
+		{
+			player.addComponent(prd.uc);
+		}
+		else
+		{
+			player.addComponent(new UpgradesComponent());
+		}
 
 		engine.addEntity(player);
 	}
@@ -320,15 +349,18 @@ public class GameWorld {
 		return e;
 	}
 	
-	public Entity makePickup( float x, float y, PickupType pt ) {
+	public Entity makePickup( PickupEntry pe ) {
+		PickupType pt = pe.pickupType;
+		
 		Entity e = new Entity();
 		TransformComponent tc = (TransformComponent) e.addComponent(new TransformComponent());
 		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
 		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
 		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
-		phc.body = physics.createPickupBody(x, y, 2);
+		phc.body = physics.createPickupBody(pe.position.x + 0.25f, pe.position.y + 0.25f, 2);
 		PickupItemComponent pic = (PickupItemComponent) e.addComponent(new PickupItemComponent());
 		pic.pickupType = pt;
+		pic.pickupEntry = pe;
 		phc.body.setUserData(e);
 		switch( pt ) {
 		case HEAL:
@@ -337,10 +369,49 @@ public class GameWorld {
 			ac.currentAnim = Gfx.healPickupAnim;
 			break;
 		case INC_STAMINA:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.incStaminaPickupAnim;
 			break;
 		case TRI_MOD:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.triModAnim;
 			break;
 		case INC_SP:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.incSpPickupAnim;
+			break;
+		case ABILITY_DASH:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.dashAbilityAnim;
+			break;
+		case ABILITY_SJUMP:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.superJumpAbilityAnim;
+			break;
+		case BI_MOD:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.biModPickupAnim;
+			break;
+		case DEMUX_MOD:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.demuxModAnim;
+			break;
+		case INC_GAUGE:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.healPickupAnim;
+			break;
+		case SINE_MOD:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.sineModAnim;
 			break;
 		default:
 			break;
@@ -393,5 +464,9 @@ public class GameWorld {
 		}
 	}
 
+	public void notify(String string) {
+		this.notification = string;
+		this.notificationTTL = 3f;
+	}
 
 }
