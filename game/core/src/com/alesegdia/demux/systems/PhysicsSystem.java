@@ -56,7 +56,11 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 					plc.jumping = false;
 					pc.grounded = true;
 					plc.platform = map;
+
 					plc.superJump = false;
+					plc.platforms.add(map);						
+
+					System.out.println("platform ENTER!");
 				}
 			}
 
@@ -65,11 +69,16 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 				Entity e = (Entity) player.getUserData();
 				PhysicsComponent pc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 				PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
-				if( plc.platform == map ) //pc.body.getLinearVelocity().y != 0 )
+				if( plc.platforms.contains(map, true) )
+				{
+				}
+				if( plc.platform == map )
 				{
 					plc.platform = null;
 					pc.grounded = false;
 					plc.jumping = true;
+					plc.platforms.removeValue(map, true);
+					System.out.println("platform EXIT!");
 				}
 			}
 		});
@@ -116,10 +125,9 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 
 	}
 
-	
-	
 	@Override
 	public void beginContact(Contact contact) {
+		System.out.println("begincontact " + contact.getWorldManifold().getNormal());
 		short cb1 = contact.getFixtureA().getFilterData().categoryBits;
 		short cb2 = contact.getFixtureB().getFilterData().categoryBits;
 		Body b1 = contact.getFixtureA().getBody();
@@ -175,6 +183,7 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
+		System.out.println("endcontact");
 		short cb1 = contact.getFixtureA().getFilterData().categoryBits;
 		short cb2 = contact.getFixtureB().getFilterData().categoryBits;
 		Body b1 = contact.getFixtureA().getBody();

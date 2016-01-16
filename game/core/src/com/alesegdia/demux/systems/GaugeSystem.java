@@ -35,9 +35,10 @@ public class GaugeSystem extends EntitySystem {
 		}
 
 		// move to player stats
-		final float RECOVER_RATE = 5;
+		//final float RECOVER_RATE = 5;
+		final float RECOVER_RATE = 60;
 		
-		gc.currentGauge = Math.min(gc.currentGauge + Gdx.graphics.getDeltaTime() * RECOVER_RATE, gc.maxGauge);
+		gc.currentGauge = Math.min(gc.currentGauge + Gdx.graphics.getDeltaTime() * gc.regenRate, gc.maxGauge);
 	}
 
 	@Override

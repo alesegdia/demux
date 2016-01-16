@@ -87,7 +87,7 @@ public class HumanControllerSystem extends EntitySystem {
 			}
 		}
 		
-		stc.current += stc.regenRate;
+		stc.current += stc.regenRate * Gdx.graphics.getDeltaTime();
 		stc.current = Math.min(stc.max, stc.current + stc.regenRate * Gdx.graphics.getDeltaTime());
 		
 		if( plc.jumping ) {
@@ -151,7 +151,7 @@ public class HumanControllerSystem extends EntitySystem {
 		changeWeapon( Input.Keys.NUM_1, wep, 0, atc, sc );		
 		changeWeapon( Input.Keys.NUM_2, wep, 1, atc, sc );		
 		changeWeapon( Input.Keys.NUM_3, wep, 2, atc, sc );		
-		changeWeapon( Input.Keys.NUM_4, wep, 3, atc, sc );		
+		changeWeapon( Input.Keys.NUM_4, wep, 3, atc, sc );
 		
 	}
 	

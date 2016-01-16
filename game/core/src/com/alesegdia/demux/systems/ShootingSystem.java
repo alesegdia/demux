@@ -6,6 +6,7 @@ import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.ActiveComponent;
 import com.alesegdia.demux.components.ShootComponent.BulletEntry;
 import com.alesegdia.demux.components.ShootComponent.BulletModel;
+import com.alesegdia.demux.components.SineMovementComponent;
 import com.alesegdia.demux.components.GraphicsComponent;
 import com.alesegdia.demux.ecs.Entity;
 import com.alesegdia.demux.ecs.EntitySystem;
@@ -70,12 +71,10 @@ public class ShootingSystem extends EntitySystem {
 							bm.w, bm.h, dir, bm.isPlayer, bm.tr, bm.destructionTime, bm.power, bm.trespassingEnabled);
 					b.name = "lebala";
 				}
-				/*
 				if( bm.sinegun ) {
 					SineMovementComponent smc = (SineMovementComponent) b.addComponent(new SineMovementComponent());
 					smc.baseY = pc.position.y + be.origin.y;
 				}
-				*/
 				
 				//GameWorld.instance.addToEngine(b);
 
