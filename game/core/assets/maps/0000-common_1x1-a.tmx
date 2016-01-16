@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="8" tileheight="8" nextobjectid="73">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="8" tileheight="8" nextobjectid="76">
  <properties>
   <property name="constraint" value="0000"/>
   <property name="links" value="0-0-TLRB"/>
@@ -68,5 +68,17 @@
   <object id="66" x="8" y="48" width="16" height="8"/>
   <object id="67" x="40" y="24" width="16" height="8"/>
   <object id="68" x="72" y="48" width="16" height="8"/>
+ </objectgroup>
+ <objectgroup name="pickups"/>
+ <objectgroup name="ability-pickups">
+  <object id="73" x="16" y="40" width="8" height="8">
+   <ellipse/>
+  </object>
+  <object id="74" x="48" y="16" width="8" height="8">
+   <ellipse/>
+  </object>
+  <object id="75" x="72" y="40" width="8" height="8">
+   <ellipse/>
+  </object>
  </objectgroup>
 </map>
