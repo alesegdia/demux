@@ -21,7 +21,18 @@ public class Gfx {
 	public static TextureRegion playerBulletTexture;
 	
 	public static Texture menuTexture;
-	public static Sprite menuSprite;
+	
+	public static Spritesheet pickupsSheet;
+	public static Animation healPickupAnim;
+	public static Animation incApPickupAnim;
+	public static Animation dashAbilityAnim;
+	public static Animation incStaminaPickupAnim;
+	public static Animation triModAnim;
+	public static Animation sineModAnim;
+	public static Animation demuxModAnim;
+	public static Animation superJumpAbilityAnim;
+	public static Animation biModPickupAnim;
+	public static Texture splashTexture;
 
 	public static void Initialize()
 	{
@@ -43,14 +54,22 @@ public class Gfx {
 		Texture pt = new Texture(Gdx.files.internal("bala.png"));
 		playerBulletTexture = new TextureRegion();
 		playerBulletTexture.setRegion(pt);
+		
+		pickupsSheet = new Spritesheet("pickups-sheet.png", 4, 3);
+		
+		healPickupAnim = new Animation(0.2f, pickupsSheet.get(0));
+		incApPickupAnim = new Animation(0.2f, pickupsSheet.get(1));
+		dashAbilityAnim = new Animation(0.2f, pickupsSheet.get(2));
+		triModAnim = new Animation(0.2f, pickupsSheet.get(3));
+		sineModAnim = new Animation(0.2f, pickupsSheet.get(4));
+		demuxModAnim = new Animation(0.2f, pickupsSheet.get(5));
+		superJumpAbilityAnim = new Animation(0.2f, pickupsSheet.get(6));
+		incStaminaPickupAnim = new Animation(0.2f, pickupsSheet.get(7));
+		biModPickupAnim = new Animation(0.2f, pickupsSheet.get(8));
 
 		menuTexture = new Texture(Gdx.files.internal("menu.png"));
+		splashTexture = new Texture(Gdx.files.internal("splash.png"));
 		
-		menuSprite = new Sprite();
-		menuSprite.setTexture(menuTexture);
-		menuSprite.setRegion(new TextureRegion(menuTexture));
-		menuSprite.setScale(10);
-		menuSprite.setPosition(0, 0);
 	}
 	
 }
