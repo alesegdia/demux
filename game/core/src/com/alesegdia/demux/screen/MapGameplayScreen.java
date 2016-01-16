@@ -3,7 +3,9 @@ package com.alesegdia.demux.screen;
 import com.alesegdia.demux.DirectionUtils;
 import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.GameWorld;
+import com.alesegdia.demux.GameWorld.Notification;
 import com.alesegdia.demux.GdxGame;
+import com.alesegdia.demux.PickupEntry;
 import com.alesegdia.demux.PickupType;
 import com.alesegdia.demux.PlayerRespawnData;
 import com.alesegdia.demux.assets.Gfx;
@@ -15,7 +17,10 @@ import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.StaminaComponent;
+import com.alesegdia.demux.components.UpgradesComponent;
 import com.alesegdia.demux.components.WeaponComponent;
+import com.alesegdia.demux.map.MapPickupCollector;
+import com.alesegdia.demux.map.PickupLocations;
 import com.alesegdia.demux.physics.MapBodyBuilder;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
@@ -72,7 +77,15 @@ public class MapGameplayScreen implements Screen {
 		
 		startRoom.isVisited = true;
 		
-		gw.makePickup(3, 2, PickupType.HEAL);
+		//PickupLocations pls = MapPickupCollector.collect(Tmx.GetMap(currentMap.rinfo.id).tilemap, GameConfig.METERS_TO_PIXELS);
+		
+		for( PickupEntry pe : g.restartScreen.pickupMap.get(currentRoom) )
+		{
+			if( !pe.collected )
+			{
+				gw.makePickup(pe);
+			}
+		}
 		
 	}
 	
@@ -142,6 +155,7 @@ public class MapGameplayScreen implements Screen {
 			prd.wc = (WeaponComponent) gw.getPlayer().getComponent(WeaponComponent.class);
 			prd.gc = (GaugeComponent) gw.getPlayer().getComponent(GaugeComponent.class);
 			prd.stc = (StaminaComponent) gw.getPlayer().getComponent(StaminaComponent.class);
+			prd.uc = (UpgradesComponent) gw.getPlayer().getComponent(UpgradesComponent.class);
 			
 			this.reset(plc.gotoRoom.connectedRoom, prd);			
 		}
@@ -159,7 +173,15 @@ public class MapGameplayScreen implements Screen {
 		StaminaComponent stc = (StaminaComponent) gw.getPlayer().getComponent(StaminaComponent.class);
 		g.font.draw(g.batch, gac.gauge() + " " + stc.stamina(), 0, 20);
 		
+		
+		gw.notificationTTL -= Gdx.graphics.getDeltaTime();
+		if( gw.notificationTTL > 0 )
+		{
+			g.font.draw(g.batch, gw.notification, 10, 580);
+		}
+		
 		g.batch.end();
+
 	}
 
 	@Override
