@@ -1,10 +1,12 @@
 package com.alesegdia.demux.screen;
 
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.GdxGame;
+import com.alesegdia.demux.PickupEntry;
 import com.alesegdia.demux.assets.Tmx;
 import com.alesegdia.demux.map.MapPickupCollector;
 import com.alesegdia.demux.map.MultipleConstraintComposer;
@@ -31,6 +33,7 @@ public class RestartGameScreen implements Screen {
 	List<Room> roomLayout;
 	//private IWorldComposer composer = new SingleConstraintComposer();
 	private IWorldComposer composer = new MultipleConstraintComposer();
+	public Hashtable<Room, List<PickupEntry>> pickupMap;
 
 	public RestartGameScreen(GdxGame gdxGame) {
 		this.g = gdxGame;
@@ -73,6 +76,9 @@ public class RestartGameScreen implements Screen {
 		}
 		System.out.println("total: " + total_pickups + ", " + total_abpickups + "\n");
 
+		this.pickupMap = MapPickupCollector.buildRoomPickupHash( result );
+		System.out.println(pickupMap);
+		
         g.tilemapScreen.reset(r);
         g.setScreen(g.tilemapScreen);
 	}
