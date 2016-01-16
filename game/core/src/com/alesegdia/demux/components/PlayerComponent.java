@@ -6,6 +6,7 @@ import com.alesegdia.troidgen.room.Link;
 import com.alesegdia.troidgen.room.Room;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 
 public class PlayerComponent extends Component{
 
@@ -20,4 +21,5 @@ public class PlayerComponent extends Component{
 	
 	public boolean showMap = false;
 	public int accumulatedAbilityPoints = 180;
+	public Array<Body> platforms = new Array<Body>();
 }
