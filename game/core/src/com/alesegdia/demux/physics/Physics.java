@@ -175,4 +175,13 @@ public class Physics {
 		return this.world;
 	}
 
+	public Body createPickupBody(float x, float y, float s) {
+		Body b = createBody(x, y, true);
+		b.setGravityScale(0);
+		CircleShape cs = new CircleShape();
+		cs.setRadius(s * GameConfig.PIXELS_TO_METERS);
+		createFixture(b, cs, CollisionLayers.CATEGORY_PICKUP, CollisionLayers.MASK_PICKUP, CollisionLayers.GROUP_PICKUP, 0, 0, 0, true);
+		return b;
+	}
+
 }

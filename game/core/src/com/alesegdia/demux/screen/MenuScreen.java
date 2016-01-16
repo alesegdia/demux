@@ -92,7 +92,7 @@ public class MenuScreen implements Screen {
 
 		g.batch.setProjectionMatrix(g.menuCam.combined);
 		g.batch.begin();
-		Gfx.menuSprite.draw(g.batch);
+		g.batch.draw(Gfx.menuTexture, 0, 0);
 		g.batch.end();
 
 		handleInput();

@@ -118,9 +118,10 @@ public class MultipleConstraintComposer implements IWorldComposer {
 			}
 		}
 
+		/*
 		RectDebugger rd = new RectDebugger(result, 800, 600, osc.enclosingRect);
 		rd.Show();
-
+		*/
 		
 		return result;
 	}

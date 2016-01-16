@@ -3,8 +3,12 @@ package com.alesegdia.demux.screen;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.GdxGame;
+import com.alesegdia.demux.assets.Tmx;
+import com.alesegdia.demux.map.MapPickupCollector;
 import com.alesegdia.demux.map.MultipleConstraintComposer;
+import com.alesegdia.demux.map.PickupLocations;
 import com.alesegdia.demux.map.SingleConstraintComposer;
 import com.alesegdia.troidgen.BiggestGroupFilter;
 import com.alesegdia.troidgen.GraphBuilder;
@@ -19,6 +23,7 @@ import com.alesegdia.troidgen.room.Room;
 import com.alesegdia.troidgen.util.UpperMatrix2D;
 import com.alesegdia.troidgen.util.Util;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 
 public class RestartGameScreen implements Screen {
 
@@ -55,6 +60,18 @@ public class RestartGameScreen implements Screen {
 		Util.shuffle(start);
 
 		Room r = start.get(0);
+		
+		int total_pickups = 0;
+		int total_abpickups = 0;
+		for( Room rr : result )
+		{
+			TiledMap tm = Tmx.GetMap(rr.rinfo.id).tilemap;
+			PickupLocations pl = MapPickupCollector.collect(tm, GameConfig.METERS_TO_PIXELS);
+			total_pickups += pl.pickups.size;
+			total_abpickups += pl.abilityPickups.size;
+			System.out.println(pl);
+		}
+		System.out.println("total: " + total_pickups + ", " + total_abpickups + "\n");
 
         g.tilemapScreen.reset(r);
         g.setScreen(g.tilemapScreen);

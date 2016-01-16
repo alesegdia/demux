@@ -6,6 +6,8 @@ import java.util.List;
 import com.alesegdia.demux.ecs.Entity;
 import com.alesegdia.demux.ecs.EntitySystem;
 import com.alesegdia.demux.physics.CollisionLayers;
+import com.alesegdia.demux.components.PickupEffectComponent;
+import com.alesegdia.demux.systems.PhysicsSystem.ICollisionCallback;
 import com.alesegdia.demux.components.PhysicsComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.RoomLinkComponent;
@@ -91,6 +93,26 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			public void endCollision(Contact c, Body player, Body link) {
 			}
 		});
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_PICKUP, CollisionLayers.CATEGORY_PLAYERLOGIC ); }
+			
+			@Override
+			public void startCollision(Contact c, Body pickupB, Body playerB, Vector2 normal) {
+				Entity pickup = (Entity) pickupB.getUserData();
+				Entity player = (Entity) playerB.getUserData();
+				PickupEffectComponent pec = (PickupEffectComponent) player.getComponent(PickupEffectComponent.class);
+				pec.pickupsCollectedLastFrame.add(pickup);
+			}
+
+			@Override
+			public void endCollision(Contact c, Body b1, Body b2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+
 
 	}
 
