@@ -2,7 +2,9 @@ package com.alesegdia.demux;
 
 import com.alesegdia.demux.components.AttackComponent;
 import com.alesegdia.demux.components.ShootComponent;
+import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.WeaponComponent;
+import com.alesegdia.demux.components.PickupItemComponent;
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.TilemapWrapper;
 import com.alesegdia.demux.components.ActiveComponent;
@@ -14,6 +16,7 @@ import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.GraphicsComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
 import com.alesegdia.demux.components.PhysicsComponent;
+import com.alesegdia.demux.components.PickupEffectComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.RoomLinkComponent;
 import com.alesegdia.demux.components.TransformComponent;
@@ -30,6 +33,7 @@ import com.alesegdia.demux.systems.FlipSystem;
 import com.alesegdia.demux.systems.GaugeSystem;
 import com.alesegdia.demux.systems.HumanControllerSystem;
 import com.alesegdia.demux.systems.MovementSystem;
+import com.alesegdia.demux.systems.PickupSystem;
 import com.alesegdia.demux.systems.ShootingSystem;
 import com.alesegdia.demux.systems.UpdatePhysicsSystem;
 import com.alesegdia.troidgen.room.Direction;
@@ -77,6 +81,8 @@ public class GameWorld {
 		engine.addSystem(physics.physicsSystem);
 		engine.addSystem(new UpdatePhysicsSystem());
 
+		engine.addSystem(new PickupSystem());
+		
 		engine.addSystem(new FlipSystem());
 		engine.addSystem(new DrawingSystem(batch), true);
 		
@@ -172,9 +178,27 @@ public class GameWorld {
 			sc.bulletConfigs = wep.weaponModel[0].bulletEntries;
 		}
 		
-		GaugeComponent gac = (GaugeComponent) player.addComponent(new GaugeComponent());
-		gac.maxGauge = 300;
-		gac.currentGauge = 300;
+		if( prd.gc != null )
+		{
+			player.addComponent(prd.gc);
+		}
+		else
+		{
+			GaugeComponent gac = (GaugeComponent) player.addComponent(new GaugeComponent());
+			gac.maxGauge = 300;
+			gac.currentGauge = 300;
+		}
+		
+		player.addComponent(new PickupEffectComponent());
+		
+		if( prd.stc != null )
+		{
+			player.addComponent(prd.stc);
+		}
+		else
+		{
+			player.addComponent(new StaminaComponent());
+		}
 
 		engine.addEntity(player);
 	}
@@ -294,6 +318,34 @@ public class GameWorld {
 		engine.addEntity(e);
 		
 		return e;
+	}
+	
+	public Entity makePickup( float x, float y, PickupType pt ) {
+		Entity e = new Entity();
+		TransformComponent tc = (TransformComponent) e.addComponent(new TransformComponent());
+		PhysicsComponent phc = (PhysicsComponent) e.addComponent(new PhysicsComponent());
+		GraphicsComponent gc = (GraphicsComponent) e.addComponent(new GraphicsComponent());
+		AnimationComponent ac = (AnimationComponent) e.addComponent(new AnimationComponent());
+		phc.body = physics.createPickupBody(x, y, 2);
+		PickupItemComponent pic = (PickupItemComponent) e.addComponent(new PickupItemComponent());
+		pic.pickupType = pt;
+		phc.body.setUserData(e);
+		switch( pt ) {
+		case HEAL:
+			gc.drawElement = Gfx.pickupsSheet.get(0);
+			gc.sprite = new Sprite(gc.drawElement);
+			ac.currentAnim = Gfx.healPickupAnim;
+			break;
+		case INC_STAMINA:
+			break;
+		case TRI_MOD:
+			break;
+		case INC_SP:
+			break;
+		default:
+			break;
+		}
+		return engine.addEntity(e);
 	}
 	
 	public Entity makeHorizontalBullet( float x, float y, float w, float h, float speed, boolean player, TextureRegion tr, boolean flipX, float dt, float power, boolean trespassingEnabled ) {
