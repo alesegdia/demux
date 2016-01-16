@@ -24,7 +24,7 @@ public class Gfx {
 	
 	public static Spritesheet pickupsSheet;
 	public static Animation healPickupAnim;
-	public static Animation incApPickupAnim;
+	public static Animation incSpPickupAnim;
 	public static Animation dashAbilityAnim;
 	public static Animation incStaminaPickupAnim;
 	public static Animation triModAnim;
@@ -58,7 +58,7 @@ public class Gfx {
 		pickupsSheet = new Spritesheet("pickups-sheet.png", 4, 3);
 		
 		healPickupAnim = new Animation(0.2f, pickupsSheet.get(0));
-		incApPickupAnim = new Animation(0.2f, pickupsSheet.get(1));
+		incSpPickupAnim = new Animation(0.2f, pickupsSheet.get(1));
 		dashAbilityAnim = new Animation(0.2f, pickupsSheet.get(2));
 		triModAnim = new Animation(0.2f, pickupsSheet.get(3));
 		sineModAnim = new Animation(0.2f, pickupsSheet.get(4));
