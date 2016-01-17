@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.alesegdia.demux.assets.Gfx;
 import com.alesegdia.demux.assets.TilemapWrapper;
+import com.alesegdia.demux.components.AIWalkComponent;
 import com.alesegdia.demux.components.ActiveComponent;
 import com.alesegdia.demux.components.AnimationComponent;
 import com.alesegdia.demux.components.BulletComponent;
@@ -18,7 +19,9 @@ import com.alesegdia.demux.components.CountdownDestructionComponent;
 import com.alesegdia.demux.components.DashComponent;
 import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.GraphicsComponent;
+import com.alesegdia.demux.components.HealthComponent;
 import com.alesegdia.demux.components.LinearVelocityComponent;
+import com.alesegdia.demux.components.PainComponent;
 import com.alesegdia.demux.components.PhysicsComponent;
 import com.alesegdia.demux.components.PickupEffectComponent;
 import com.alesegdia.demux.components.PlayerComponent;
@@ -29,6 +32,7 @@ import com.alesegdia.demux.ecs.Engine;
 import com.alesegdia.demux.ecs.Entity;
 import com.alesegdia.demux.physics.CollisionLayers;
 import com.alesegdia.demux.physics.Physics;
+import com.alesegdia.demux.systems.AIWalkingSystem;
 import com.alesegdia.demux.systems.AnimationSystem;
 import com.alesegdia.demux.systems.AttackTriggeringSystem;
 import com.alesegdia.demux.systems.CountdownDestructionSystem;
@@ -38,6 +42,7 @@ import com.alesegdia.demux.systems.FlipSystem;
 import com.alesegdia.demux.systems.GaugeSystem;
 import com.alesegdia.demux.systems.HumanControllerSystem;
 import com.alesegdia.demux.systems.MovementSystem;
+import com.alesegdia.demux.systems.PainSystem;
 import com.alesegdia.demux.systems.PickupSystem;
 import com.alesegdia.demux.systems.ShootingSystem;
 import com.alesegdia.demux.systems.SineMovementSystem;
@@ -97,9 +102,14 @@ public class GameWorld {
 		engine.addSystem(new DashingSystem());
 		engine.addSystem(new MovementSystem());
 
+		// TODO: ver por que no funciona el sine, ver orden en asroth
+		
 		engine.addSystem(new CountdownDestructionSystem());
+		engine.addSystem(new PainSystem());
+		engine.addSystem(new AIWalkingSystem());
 		engine.addSystem(physics.physicsSystem);
 		engine.addSystem(new UpdatePhysicsSystem());
+		engine.addSystem(new SineMovementSystem());
 
 		engine.addSystem(new PickupSystem());
 		
@@ -123,6 +133,12 @@ public class GameWorld {
 	}
 	
 	public static TransformComponent playerPositionComponent;
+	
+	public void configAlive( Entity e, float hp )
+	{
+		e.addComponent(new HealthComponent(hp));
+		e.addComponent(new PainComponent());
+	}
 	
 	public void makePlayer(int x, int y, PlayerRespawnData prd) {
 		player = new Entity();
@@ -228,8 +244,43 @@ public class GameWorld {
 		{
 			player.addComponent(new UpgradesComponent());
 		}
+		
+		configAlive(player, 100);
 
 		engine.addEntity(player);
+	}
+	
+	public Entity makeSlimeEnemy(float x, float y)
+	{
+		Entity slime = new Entity();
+		
+		PhysicsComponent pc = (PhysicsComponent) slime.addComponent(new PhysicsComponent());
+		pc.body = physics.createEnemyBody(x, y);
+		pc.body.setUserData(slime);
+		pc.grounded = false;
+
+		LinearVelocityComponent lvc = (LinearVelocityComponent) slime.addComponent(new LinearVelocityComponent());
+		
+		GraphicsComponent gc = (GraphicsComponent) slime.addComponent(new GraphicsComponent());
+		System.out.println(gc);
+		gc.drawElement = Gfx.slimeSheet.get(0);
+		gc.sprite = new Sprite(gc.drawElement);
+		gc.hasShadowEffect = true;
+
+		TransformComponent tc = (TransformComponent) slime.addComponent(new TransformComponent());
+		tc.position = pc.body.getPosition();
+		
+		AnimationComponent ac = (AnimationComponent) slime.addComponent(new AnimationComponent());
+		ac.currentAnim = Gfx.slimeAnim;
+		
+		AIWalkComponent aiwc = (AIWalkComponent) slime.addComponent(new AIWalkComponent());
+		aiwc.walkingLeft = RNG.rng.nextBoolean();
+
+		configAlive(slime, 100);
+
+		engine.addEntity(slime);
+
+		return slime;
 	}
 	
 	public void makeEntrance(Link l)

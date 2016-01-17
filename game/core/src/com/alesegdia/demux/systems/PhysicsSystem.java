@@ -8,6 +8,8 @@ import com.alesegdia.demux.ecs.EntitySystem;
 import com.alesegdia.demux.physics.CollisionLayers;
 import com.alesegdia.demux.components.PickupEffectComponent;
 import com.alesegdia.demux.systems.PhysicsSystem.ICollisionCallback;
+import com.alesegdia.demux.components.AIWalkComponent;
+import com.alesegdia.demux.components.PainComponent;
 import com.alesegdia.demux.components.PhysicsComponent;
 import com.alesegdia.demux.components.PlayerComponent;
 import com.alesegdia.demux.components.RoomLinkComponent;
@@ -59,8 +61,6 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 
 					plc.superJump = false;
 					plc.platforms.add(map);						
-
-					System.out.println("platform ENTER!");
 				}
 			}
 
@@ -78,7 +78,6 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 					pc.grounded = false;
 					plc.jumping = true;
 					plc.platforms.removeValue(map, true);
-					System.out.println("platform EXIT!");
 				}
 			}
 		});
@@ -122,12 +121,50 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 			
 		});
 
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_ENEMYLOGIC, CollisionLayers.CATEGORY_ENEMYLIMIT ); }
+			
+			@Override
+			public void startCollision(Contact c, Body b1, Body b2, Vector2 normal) {
+				Entity e = (Entity) b1.getUserData();
+				AIWalkComponent aiwc = (AIWalkComponent) e.getComponent(AIWalkComponent.class);
+				if( aiwc != null ) {
+					aiwc.walkingLeft = !aiwc.walkingLeft;
+				}
+			}
+
+			@Override
+			public void endCollision(Contact c, Body b1, Body b2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		callbacks.add(new ICollisionCallback() {
+			{ setCategories( CollisionLayers.CATEGORY_PLAYERLOGIC, CollisionLayers.CATEGORY_ENEMYLOGIC ); }
+			
+			@Override
+			public void startCollision(Contact c, Body playerB, Body enemyB, Vector2 normal) {
+				Entity player = (Entity) playerB.getUserData();
+				Entity enemy = (Entity) enemyB.getUserData();
+				PlayerComponent pc = (PlayerComponent) player.getComponent(PlayerComponent.class);
+				PainComponent dc = (PainComponent) player.getComponent(PainComponent.class);
+				dc.lastFrameDamage += 1;
+				System.out.println("ENTRA!!");
+			}
+
+			@Override
+			public void endCollision(Contact c, Body shopB, Body playerB) {
+			}
+			
+		});
+		
 
 	}
 
 	@Override
 	public void beginContact(Contact contact) {
-		System.out.println("begincontact " + contact.getWorldManifold().getNormal());
 		short cb1 = contact.getFixtureA().getFilterData().categoryBits;
 		short cb2 = contact.getFixtureB().getFilterData().categoryBits;
 		Body b1 = contact.getFixtureA().getBody();
@@ -183,7 +220,6 @@ public class PhysicsSystem extends EntitySystem implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		System.out.println("endcontact");
 		short cb1 = contact.getFixtureA().getFilterData().categoryBits;
 		short cb2 = contact.getFixtureB().getFilterData().categoryBits;
 		Body b1 = contact.getFixtureA().getBody();

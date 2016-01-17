@@ -184,4 +184,16 @@ public class Physics {
 		return b;
 	}
 
+	public Body createEnemyBody(float x, float y) {
+		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS, true);
+		CircleShape cs = new CircleShape();
+		cs.setRadius(4 * GameConfig.PIXELS_TO_METERS);
+		
+		createFixture(b, cs, CollisionLayers.CATEGORY_ENEMYLOGIC, CollisionLayers.MASK_ENEMYLOGIC, CollisionLayers.GROUP_ENEMYLOGIC, 1f, 0f, 0f, true);
+		createFixture(b, cs, CollisionLayers.CATEGORY_ENEMYPHYSIC, CollisionLayers.MASK_ENEMYPHYSIC, CollisionLayers.GROUP_ENEMYPHYSIC, 1f, 0f, 0f);
+		
+		cs.dispose();
+		return b;
+	}
+
 }
