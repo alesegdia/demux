@@ -27,10 +27,10 @@ public class MapBodyBuilder {
 	// The pixels per tile. If your tiles are 16x16, this is set to 16f
 	private static float ppt = 8f;
 
-	public static Array<Body> buildShapes(Map map, float pixels, World world) {
+	public static Array<Body> buildShapes(Map map, String layerName, float pixels, World world, short category, short mask, short group) {
 		ppt = pixels;
-		MapObjects objects = map.getLayers().get("collision").getObjects();
 
+		MapObjects objects = map.getLayers().get(layerName).getObjects();
 		Array<Body> bodies = new Array<Body>();
 
 		for(MapObject object : objects) {
@@ -62,9 +62,9 @@ public class MapBodyBuilder {
 			Body body = world.createBody(bd);
 			FixtureDef fd = new FixtureDef();
 			fd.shape = shape;
-			fd.filter.categoryBits = CollisionLayers.CATEGORY_MAP;
-			fd.filter.maskBits = CollisionLayers.MASK_MAP;
-			fd.filter.groupIndex = CollisionLayers.GROUP_MAP;
+			fd.filter.categoryBits = category;
+			fd.filter.maskBits = mask;
+			fd.filter.groupIndex = group;
 			fd.density = 1;
 
 			body.createFixture(fd);
