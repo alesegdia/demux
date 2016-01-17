@@ -4,7 +4,7 @@ import com.alesegdia.demux.ecs.Component;
 
 public class StaminaComponent extends Component {
 
-	public float regenRate = 2f;
+	public float regenRate = 1f;
 	public float max = 300f;
 	public float current = 300f;
 	public CharSequence stamina() {

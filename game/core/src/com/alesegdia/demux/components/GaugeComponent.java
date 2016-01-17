@@ -6,7 +6,7 @@ public class GaugeComponent extends Component {
 
 	public float maxGauge = 300;
 	public float currentGauge = 300;
-	public float regenRate = 20f;
+	public float regenRate = 1f;
 	
 	public CharSequence gauge() {
 		return "" + Math.round(currentGauge * 100 / maxGauge) + "%";
