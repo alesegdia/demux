@@ -107,11 +107,17 @@ public class Physics {
 		//CircleShape cs = new CircleShape();
 		//cs.setRadius(7.41f * GameConfig.PIXELS_TO_METERS);
 		PolygonShape cs = new PolygonShape();
-		cs.setAsBox(0.14f, 0.35f);
+		cs.setAsBox(0.14f, 0.36f);
 		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
 		cs.setAsBox(0.15f, 0.36f);
 		createFixture(b, cs, CollisionLayers.CATEGORY_PLAYERLOGIC, CollisionLayers.MASK_PLAYERLOGIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
 		cs.dispose();
+		
+		//CircleShape cshp = new CircleShape();
+		//cshp.setRadius(2 * GameConfig.PIXELS_TO_METERS);
+		//cshp.setPosition(new Vector2(0,-0.25f));
+		//createFixture(b, cshp, CollisionLayers.CATEGORY_PLAYERPHYSIC, CollisionLayers.MASK_PLAYERPHYSIC, CollisionLayers.GROUP_PLAYERPHYSIC, 1f, 0f, 0f);
+		
 		b.setFixedRotation(true);
 		return b;
 
