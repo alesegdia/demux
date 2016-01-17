@@ -81,4 +81,6 @@
    <ellipse/>
   </object>
  </objectgroup>
+ <objectgroup name="enemy-limits"/>
+ <objectgroup name="enemy-spawn-easy"/>
 </map>

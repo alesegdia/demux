@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="20" tilewidth="8" tileheight="8" nextobjectid="127">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="20" tilewidth="8" tileheight="8" nextobjectid="136">
  <properties>
   <property name="constraint" value="0000"/>
   <property name="links" value="0-0-BL 1-0-BR 0-1-LT 1-1-TR"/>
@@ -128,6 +128,25 @@
    <ellipse/>
   </object>
   <object id="118" x="128" y="96" width="8" height="8">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="enemy-limits">
+  <object id="130" x="52" y="28" width="8" height="8"/>
+  <object id="131" x="108" y="28" width="8" height="8"/>
+  <object id="132" x="60" y="76" width="8" height="8"/>
+  <object id="133" x="100" y="76" width="8" height="8"/>
+  <object id="134" x="8" y="148" width="8" height="8"/>
+  <object id="135" x="176" y="148" width="8" height="8"/>
+ </objectgroup>
+ <objectgroup name="enemy-spawn-easy">
+  <object id="127" x="64" y="24" width="8" height="8">
+   <ellipse/>
+  </object>
+  <object id="128" x="88" y="144" width="8" height="8">
+   <ellipse/>
+  </object>
+  <object id="129" x="80" y="72" width="8" height="8">
    <ellipse/>
   </object>
  </objectgroup>
