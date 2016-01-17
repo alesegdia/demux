@@ -33,7 +33,13 @@ public class Gfx {
 	public static Animation superJumpAbilityAnim;
 	public static Animation biModPickupAnim;
 	public static Texture splashTexture;
-
+	
+	public static Spritesheet slimeSheet;
+	public static Animation slimeAnim;
+	
+	public static Spritesheet jumperSheet;
+	public static Animation jumperAnim;
+	
 	public static void Initialize()
 	{
 		playerSheet = new Spritesheet("tiacascoanim2.png", 3, 3);
@@ -69,6 +75,12 @@ public class Gfx {
 
 		menuTexture = new Texture(Gdx.files.internal("menu.png"));
 		splashTexture = new Texture(Gdx.files.internal("splash.png"));
+		
+		slimeSheet = new Spritesheet("enemy-slime-sheet.png", 1, 2);
+		slimeAnim = new Animation(0.2f, slimeSheet.getRange(0, 1));
+		
+		jumperSheet = new Spritesheet("enemy-jumper-sheet.png", 1, 4);
+		jumperAnim = new Animation(0.2f, jumperSheet.getRange(2, 3));
 		
 	}
 	
