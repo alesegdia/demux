@@ -19,8 +19,10 @@ import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.UpgradesComponent;
 import com.alesegdia.demux.components.WeaponComponent;
+import com.alesegdia.demux.map.MapObjectPositionCollector;
 import com.alesegdia.demux.map.MapPickupCollector;
 import com.alesegdia.demux.map.PickupLocations;
+import com.alesegdia.demux.physics.CollisionLayers;
 import com.alesegdia.demux.physics.MapBodyBuilder;
 import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Room;
@@ -69,7 +71,17 @@ public class MapGameplayScreen implements Screen {
 			gw.makePlayer((int)prd.spawnPos.x, (int)prd.spawnPos.y, prd );
 		}
 		
-		Array<Body> bodies = MapBodyBuilder.buildShapes(this.currentMap.tilemap, GameConfig.METERS_TO_PIXELS, g.physics.world());
+		Array<Body> collision_bodies = MapBodyBuilder.buildShapes(this.currentMap.tilemap, "collision", GameConfig.METERS_TO_PIXELS, g.physics.world(),
+				CollisionLayers.CATEGORY_MAP, CollisionLayers.MASK_MAP, CollisionLayers.GROUP_MAP );
+
+		Array<Body> enemylimits_bodies = MapBodyBuilder.buildShapes(this.currentMap.tilemap, "enemy-limits", GameConfig.METERS_TO_PIXELS, g.physics.world(),
+				CollisionLayers.CATEGORY_ENEMYLIMIT, CollisionLayers.MASK_ENEMYLIMIT, CollisionLayers.GROUP_ENEMYLIMIT );
+		
+		Array<Vector2> spawners = MapObjectPositionCollector.Collect(this.currentMap.tilemap, "enemy-spawn-easy", GameConfig.METERS_TO_PIXELS);
+		for( Vector2 v : spawners )
+		{
+			gw.makeSlimeEnemy(v.x, v.y);
+		}
 
 		gw.buildMapEntities(startRoom);
 		
@@ -98,6 +110,10 @@ public class MapGameplayScreen implements Screen {
 	public void render(float delta)
 	{	
 		
+		if( Gdx.input.isKeyJustPressed(Input.Keys.F9) )
+		{
+			this.physicsDebug = !this.physicsDebug;
+		}
 		gw.step();
 		g.physics.step(delta);
 

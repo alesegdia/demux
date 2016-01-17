@@ -55,6 +55,7 @@ public class RestartGameScreen implements Screen {
 		LinkBuilder linksb = new LinkBuilder();
 		linksb.generate(result);
 		
+		System.out.println("=======");
 		List<List<Room>> startRooms = computeStartRooms(result);
 
 		IRoomGroupFilter rgf = new BiggestGroupFilter();
@@ -62,6 +63,12 @@ public class RestartGameScreen implements Screen {
 		List<Room> start = rgf.filter(startRooms);
 		Util.shuffle(start);
 
+		System.out.println("========================");
+		for( Room r : start )
+		{
+			System.out.println(r.rinfo.restriction);
+		}
+		
 		Room r = start.get(0);
 		
 		int total_pickups = 0;
@@ -72,9 +79,7 @@ public class RestartGameScreen implements Screen {
 			PickupLocations pl = MapPickupCollector.collect(tm, GameConfig.METERS_TO_PIXELS);
 			total_pickups += pl.pickups.size;
 			total_abpickups += pl.abilityPickups.size;
-			System.out.println(pl);
 		}
-		System.out.println("total: " + total_pickups + ", " + total_abpickups + "\n");
 
 		this.pickupMap = MapPickupCollector.buildRoomPickupHash( result );
 		System.out.println(pickupMap);

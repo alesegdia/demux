@@ -48,9 +48,15 @@ public class MenuScreen implements Screen {
 	private int remainingPoints;
 	private int selectedAttr;
 	private WeaponStats editingWeaponStats;
+	private boolean debug = false;
 	
 	@Override
 	public void render(float delta) {
+		if( Gdx.input.isKeyJustPressed(Input.Keys.F9) )
+		{
+			this.debug = !this.debug;
+		}
+		
 		if( Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) )
 		{
 			if( state == STATE_MAP )
@@ -138,7 +144,7 @@ public class MenuScreen implements Screen {
 		StaminaComponent stc = (StaminaComponent) g.tilemapScreen.gw.getPlayer().getComponent(StaminaComponent.class);
 		GaugeComponent gc = (GaugeComponent) g.tilemapScreen.gw.getPlayer().getComponent(GaugeComponent.class);
 		g.font.draw(g.batch, "83/100", 120, 254);
-		g.font.draw(g.batch, (stc.regenRate) + "/sec", 120, 206);
+		g.font.draw(g.batch, ((int)stc.regenRate) + "/sec", 120, 206);
 		g.font.draw(g.batch, ((int)gc.regenRate) + "/sec", 120, 158);
 		g.batch.end();
 
@@ -320,9 +326,9 @@ public class MenuScreen implements Screen {
 		
 		for( Room r : g.restartScreen.roomLayout )
 		{
-			if( true && r.isVisited )
+			if( r.isVisited || this.debug )
 			{
-				if( r == g.tilemapScreen.currentRoom )
+				if( r == g.tilemapScreen.currentRoom && !this.debug )
 				{
 					g.srend.setColor(1,1,1,((float) Math.sin(Gdx.graphics.getFrameId()/10f) + 1f) / 2f );
 				}
