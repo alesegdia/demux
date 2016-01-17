@@ -6,6 +6,7 @@ import com.alesegdia.demux.GameWorld;
 import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.PickupEffectComponent;
 import com.alesegdia.demux.components.PickupItemComponent;
+import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.UpgradesComponent;
 
 public class PickupSystem extends EntitySystem {
@@ -38,6 +39,8 @@ public class PickupSystem extends EntitySystem {
 			case INC_STAMINA:
 				wasPicked = true;
 				GameWorld.instance.notify("+stamina");
+				StaminaComponent sc = (StaminaComponent) GameWorld.instance.getPlayer().getComponent(StaminaComponent.class);
+				sc.regenRate += 1;
 				pic.pickupEntry.collected = true;
 				break;
 			case TRI_MOD:
@@ -79,6 +82,8 @@ public class PickupSystem extends EntitySystem {
 				wasPicked = true;
 				GameWorld.instance.notify("+gauge");
 				pic.pickupEntry.collected = true;
+				GaugeComponent gc = (GaugeComponent) GameWorld.instance.getPlayer().getComponent(GaugeComponent.class);
+				gc.regenRate += 1;
 				break;
 			case SINE_MOD:
 				wasPicked = true;
