@@ -3,11 +3,15 @@ package com.alesegdia.demux.systems;
 import com.alesegdia.demux.ecs.Entity;
 import com.alesegdia.demux.ecs.EntitySystem;
 import com.alesegdia.demux.GameWorld;
+import com.alesegdia.demux.components.AttackComponent;
 import com.alesegdia.demux.components.GaugeComponent;
 import com.alesegdia.demux.components.PickupEffectComponent;
 import com.alesegdia.demux.components.PickupItemComponent;
+import com.alesegdia.demux.components.PlayerComponent;
+import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.UpgradesComponent;
+import com.alesegdia.demux.components.WeaponComponent;
 
 public class PickupSystem extends EntitySystem {
 
@@ -38,25 +42,30 @@ public class PickupSystem extends EntitySystem {
 				break;
 			case INC_STAMINA:
 				wasPicked = true;
-				GameWorld.instance.notify("+stamina");
 				StaminaComponent sc = (StaminaComponent) GameWorld.instance.getPlayer().getComponent(StaminaComponent.class);
-				sc.regenRate += 1;
+				sc.regenRate += 4;
 				pic.pickupEntry.collected = true;
+				GameWorld.instance.notify("stamina regen " + ((int)sc.regenRate));
 				break;
 			case TRI_MOD:
 				wasPicked = true;
 				GameWorld.instance.notify("trivium");
 				pic.pickupEntry.collected = true;
 				uc.hasTrivium = true;
+				WeaponComponent wc = (WeaponComponent) e.getComponent(WeaponComponent.class);
+				wc.weaponModel[1].ws.modifier = 2;
+				updateWeapon(1, 2);
 				break;
 			case INC_SP:
 				wasPicked = true;
-				GameWorld.instance.notify("+sp");
 				pic.pickupEntry.collected = true;
+				PlayerComponent plc = (PlayerComponent) GameWorld.instance.getPlayer().getComponent(PlayerComponent.class);
+				plc.accumulatedAbilityPoints += 18;
+				GameWorld.instance.notify("sp " + plc.accumulatedAbilityPoints);
 				break;
 			case ABILITY_DASH:
 				wasPicked = true;
-				GameWorld.instance.notify("dash");
+				GameWorld.instance.notify("dash (press e/q for dashing)");
 				pic.pickupEntry.collected = true;
 				uc.hasDash = true;
 				break;
@@ -71,6 +80,9 @@ public class PickupSystem extends EntitySystem {
 				GameWorld.instance.notify("binary");
 				pic.pickupEntry.collected = true;
 				uc.hasBinary = true;
+				WeaponComponent wec = (WeaponComponent) e.getComponent(WeaponComponent.class);
+				wec.weaponModel[1].ws.modifier = 2;
+				updateWeapon(0, 1);
 				break;
 			case DEMUX_MOD:
 				wasPicked = true;
@@ -80,16 +92,17 @@ public class PickupSystem extends EntitySystem {
 				break;
 			case INC_GAUGE:
 				wasPicked = true;
-				GameWorld.instance.notify("+gauge");
 				pic.pickupEntry.collected = true;
 				GaugeComponent gc = (GaugeComponent) GameWorld.instance.getPlayer().getComponent(GaugeComponent.class);
-				gc.regenRate += 1;
+				gc.regenRate += 4;
+				GameWorld.instance.notify("gauge regen " + ((int)(gc.regenRate)) );
 				break;
 			case SINE_MOD:
 				wasPicked = true;
 				GameWorld.instance.notify("wavegun");
 				pic.pickupEntry.collected = true;
 				uc.hasWavegun = true;
+				updateWeapon(2, 3);
 				break;
 			default:
 				break;
@@ -101,6 +114,20 @@ public class PickupSystem extends EntitySystem {
 		{
 			pec.pickupsCollectedLastFrame.clear();
 		}
+	}
+
+	public void updateWeapon(int slot, int modifier)
+	{
+		WeaponComponent wc = (WeaponComponent) GameWorld.instance.getPlayer().getComponent(WeaponComponent.class);
+		AttackComponent atc = (AttackComponent) GameWorld.instance.getPlayer().getComponent(AttackComponent.class);
+		ShootComponent sc = (ShootComponent) GameWorld.instance.getPlayer().getComponent(ShootComponent.class);
+		
+		// change weapon
+		wc.weaponModel[slot].ws.modifier = modifier;
+		wc.weaponModel[slot] = wc.weaponModel[slot].ws.makeModel();
+		
+		atc.attackCooldown = wc.weaponModel[slot].rate;
+		sc.bulletConfigs = wc.weaponModel[slot].bulletEntries;
 	}
 
 }
