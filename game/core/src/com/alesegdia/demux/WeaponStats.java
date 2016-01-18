@@ -24,7 +24,7 @@ public class WeaponStats {
 	public int speed;
 	
 	// triple gun, sine gun, 5-gun
-	public int modifier = 2;
+	public int modifier = 0;
 	
 	public WeaponStats(int p, int r, int t, int s) {
 		power = p;
