@@ -71,7 +71,7 @@ public class MultipleConstraintComposer implements IWorldComposer {
 		float pos = 0f;
 		float k = 0.0001f;
 		
-		while( result.size() < 30 )
+		while( result.size() < 10 )
 		{
 			//if( pos > 10 ) k = -k;
 			//if( pos < -10 ) k = -k;
@@ -91,13 +91,48 @@ public class MultipleConstraintComposer implements IWorldComposer {
 		List<Room> tmp = new LinkedList<Room>();
 		tmp.addAll(result);
 		
-		while( result.size() < 60 )
+		while( result.size() < 20 )
 		{
 			Logger.Log(lbc.spawnRect.position);
 			lbc.spawnRect.position.x -= k;
 			lbc.spawnRect.position.y -= k;
 			osc.enclosingRect.position.x -= k;
 			osc.enclosingRect.position.y -= k;
+			mrp = new ExactRoomProvider();
+			mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs2));
+			//mrp.addAll(Tmx.GetRoomsOfTypeFitting(RoomType.COMMON, rs2));
+			msrge = new ExactRoomProviderValidator( mrp );
+			result = addNotAdded(result, tmp);
+			Logger.Log("enter");
+			result = lb.generate(lbc, mrp, msrge, result);
+			Logger.Log("quit");
+			if( false ) //result.size() > 40 )
+			{
+				(new RectDebugger(result, 800, 600)).Show();
+				try {
+					System.in.read();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		for( Room r : result )
+		{
+			
+		}
+
+		List<Room> prev = new LinkedList<Room>();
+		prev.addAll(result);
+		
+		while( result.size() < 40 )
+		{
+			Logger.Log(lbc.spawnRect.position);
+			lbc.spawnRect.position.x += k;
+			lbc.spawnRect.position.y += k;
+			osc.enclosingRect.position.x += k;
+			osc.enclosingRect.position.y += k;
 			mrp = new ExactRoomProvider();
 			mrp.addAll(Tmx.GetRoomsOfTypeAndRestriction(RoomType.COMMON, rs2));
 			//mrp.addAll(Tmx.GetRoomsOfTypeFitting(RoomType.COMMON, rs2));
