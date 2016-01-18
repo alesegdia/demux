@@ -3,6 +3,7 @@ package com.alesegdia.demux.physics;
 import com.alesegdia.demux.physics.CollisionLayers;
 import com.alesegdia.demux.GameConfig;
 import com.alesegdia.demux.systems.PhysicsSystem;
+import com.alesegdia.troidgen.room.Direction;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -123,12 +124,26 @@ public class Physics {
 
 	}
 
-	public Body createLinkBody(float x, float y) {
+	public Body createLinkBody(float x, float y, Direction direction) {
 		Body b = createBody(x * GameConfig.PIXELS_TO_METERS, y* GameConfig.PIXELS_TO_METERS, false);
 		//CircleShape cs = new CircleShape();
 		//cs.setRadius(7.41f * GameConfig.PIXELS_TO_METERS);
 		PolygonShape cs = new PolygonShape();
-		cs.setAsBox(0.1f, 0.1f);
+		float w, h;
+		w = h = 0.1f;
+		switch(direction)
+		{
+		case DOWN:
+		case TOP:
+			w = 0.3f;
+			break;
+		case LEFT:
+		case RIGHT:
+			h = 0.3f;
+			break;
+		
+		}
+		cs.setAsBox(w, h);
 		createFixture(b, cs, CollisionLayers.CATEGORY_LINK, CollisionLayers.MASK_LINK, CollisionLayers.GROUP_LINK, 1f, 0f, 0f, true);
 		cs.dispose();
 		return b;
