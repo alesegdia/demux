@@ -76,6 +76,7 @@ public class MenuScreen implements Screen {
 				ShootComponent sc = (ShootComponent) g.tilemapScreen.gw.getPlayer().getComponent(ShootComponent.class);
 				
 				// change weapon
+				this.editingWeaponStats.modifier = wc.weaponModel[this.currentSlot].ws.modifier;
 				wc.weaponModel[this.currentSlot] = this.editingWeaponStats.makeModel();
 				
 				atc.attackCooldown = wc.weaponModel[this.currentSlot].rate;
@@ -264,11 +265,35 @@ public class MenuScreen implements Screen {
 			resetSkillsAndRedist();
 		}
 
+		
+		UpgradesComponent uc = (UpgradesComponent) g.tilemapScreen.gw.getPlayer().getComponent(UpgradesComponent.class);
 		WeaponComponent wc = (WeaponComponent) g.tilemapScreen.gw.getPlayer().getComponent(WeaponComponent.class);
 		WeaponModel wm = wc.weaponModel[currentSlot];
 		String str = "";
-		str += "slot " + currentSlot + "\n======\n\n";
+		
+		if( currentSlot == 0 && uc.hasBinary )
+		{
+			str += "binary";
+		}
+		else if( currentSlot == 1 && uc.hasTrivium )
+		{
+			str += "trivium";
+		}
+		else if( currentSlot == 2 && uc.hasWavegun )
+		{
+			str += "wavegun";
+		}
+		else if( currentSlot == 3 && uc.hasDemux )
+		{
+			str += "demux";
+		}
+		else
+		{
+			str += "slot " + currentSlot;
+		}
 
+		str += "\n======\n\n";
+		
 		String powerStr = "power ";
 		String ttlStr = "ttl   ";
 		String speedStr = "speed ";
@@ -347,8 +372,8 @@ public class MenuScreen implements Screen {
 						g.srend.setColor(0.5f,0.5f,0.5f,0.5f);
 					}
 				}
-				float s = 12;
-				g.srend.rect(500 + -offset.x * s + r.position.x * s, 200 + -offset.y * s + r.position.y * s, r.size.x * s, r.size.y * s);
+				float s = 20;
+				g.srend.rect(500 + -offset.x * s + r.position.x * s, 250 + -offset.y * s + r.position.y * s, r.size.x * s, r.size.y * s);
 			}
 		}
 
