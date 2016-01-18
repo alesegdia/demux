@@ -53,9 +53,9 @@ public class ShootingSystem extends EntitySystem {
 								bm.w, bm.h, bm.speed, bm.isPlayer, bm.tr, flip, bm.destructionTime, bm.power,
 								bm.trespassingEnabled);
 				} else {
-					TransformComponent plpc = GameWorld.playerPositionComponent;
 					Vector2 dir;
 					if( !bm.isPlayer ) {
+						TransformComponent plpc = GameWorld.playerPositionComponent;
 						dir = new Vector2(plpc.position).sub(pc.position).nor().scl(bm.speed);
 					} else {
 						dir = new Vector2(bm.dir);
@@ -72,11 +72,12 @@ public class ShootingSystem extends EntitySystem {
 					b.name = "lebala";
 				}
 				if( bm.sinegun ) {
+					System.out.println("SINEGUN!");
 					SineMovementComponent smc = (SineMovementComponent) b.addComponent(new SineMovementComponent());
 					smc.baseY = pc.position.y + be.origin.y;
 				}
 				
-				//GameWorld.instance.addToEngine(b);
+				GameWorld.instance.addToEngine(b);
 
 			}
 		}
