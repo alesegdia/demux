@@ -14,6 +14,7 @@ import com.alesegdia.demux.components.ShadowBufferEntry;
 import com.alesegdia.demux.components.ShootComponent;
 import com.alesegdia.demux.components.StaminaComponent;
 import com.alesegdia.demux.components.TransformComponent;
+import com.alesegdia.demux.components.UpgradesComponent;
 import com.alesegdia.demux.components.WeaponComponent;
 import com.alesegdia.demux.components.WeaponComponent.WeaponModel;
 import com.badlogic.gdx.Gdx;
@@ -36,6 +37,7 @@ public class HumanControllerSystem extends EntitySystem {
 		PlayerComponent plc = (PlayerComponent) e.getComponent(PlayerComponent.class);
 		GraphicsComponent gc = (GraphicsComponent) e.getComponent(GraphicsComponent.class);
 		StaminaComponent stc = (StaminaComponent) e.getComponent(StaminaComponent.class);
+		UpgradesComponent uc = (UpgradesComponent) e.getComponent(UpgradesComponent.class);
 		
 		// TODO: use 3 raycasts to check for grounded
 		int dx = 0; int dy = 0;
@@ -50,14 +52,14 @@ public class HumanControllerSystem extends EntitySystem {
 		DashComponent dc = (DashComponent) e.getComponent(DashComponent.class);
 
 		float DASH_COST = 10f;
-		if( Gdx.input.isKeyJustPressed(Input.Keys.E) && stc.current - DASH_COST >= 0 ) 
+		if( Gdx.input.isKeyJustPressed(Input.Keys.E) && stc.current - DASH_COST >= 0 && uc.hasDash ) 
 		{
 			dc.dashTimer = 0.3f;
 			dc.dashIntensity = 6;
 			stc.current -= DASH_COST;
 		}
 		
-		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) && stc.current - DASH_COST >= 0 ) 
+		if( Gdx.input.isKeyJustPressed(Input.Keys.Q) && stc.current - DASH_COST >= 0 && uc.hasDash ) 
 		{
 			dc.dashTimer = 0.3f;
 			dc.dashIntensity = -6;
@@ -74,7 +76,7 @@ public class HumanControllerSystem extends EntitySystem {
 				plc.jumping = true;
 				lvc.doCap[1] = false;
 				float SUPERJUMP_COST = 10f;
-				if( dc.dashTimer > 0 && stc.current - SUPERJUMP_COST >= 0 )
+				if( dc.dashTimer > 0 && stc.current - SUPERJUMP_COST >= 0 && uc.hasSJump )
 				{
 					prevYlinear = 8f;
 					plc.superJump = true;
