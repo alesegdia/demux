@@ -20,6 +20,6 @@ public class PlayerComponent extends Component{
 	public Body platform = null;
 	
 	public boolean showMap = false;
-	public int accumulatedAbilityPoints = 180;
+	public int accumulatedAbilityPoints = 18;
 	public Array<Body> platforms = new Array<Body>();
 }
