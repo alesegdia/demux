@@ -17,6 +17,7 @@ public class Gfx {
 	
 	public static Spritesheet entranceSheet;
 	public static Animation[] entranceAnims;
+	public static Animation[] entranceOpenedAnims;
 	public static Animation playerDash;
 	public static TextureRegion playerBulletTexture;
 	
@@ -25,6 +26,7 @@ public class Gfx {
 	public static Spritesheet pickupsSheet;
 	public static Animation healPickupAnim;
 	public static Animation incSpPickupAnim;
+	public static Animation incGaugeAnim;
 	public static Animation dashAbilityAnim;
 	public static Animation incStaminaPickupAnim;
 	public static Animation triModAnim;
@@ -50,12 +52,18 @@ public class Gfx {
 		playerWalk = new Animation(0.1f, playerSheet.getRange(2, 4));
 		playerWalk.setPlayMode(PlayMode.LOOP_PINGPONG);
 		
-		entranceSheet = new Spritesheet("entrance-sheet.png", 1, 4);		
+		entranceSheet = new Spritesheet("entrance-sheet.png", 2, 4);
 		entranceAnims = new Animation[4];
 		entranceAnims[0] = new Animation(0.2f, entranceSheet.get(0));
 		entranceAnims[1] = new Animation(0.2f, entranceSheet.get(1));
 		entranceAnims[2] = new Animation(0.2f, entranceSheet.get(2));
 		entranceAnims[3] = new Animation(0.2f, entranceSheet.get(3));
+		
+		entranceOpenedAnims = new Animation[4];
+		entranceOpenedAnims[0] = new Animation(0.2f, entranceSheet.get(4));
+		entranceOpenedAnims[1] = new Animation(0.2f, entranceSheet.get(5));
+		entranceOpenedAnims[2] = new Animation(0.2f, entranceSheet.get(6));
+		entranceOpenedAnims[3] = new Animation(0.2f, entranceSheet.get(7));
 		
 		Texture pt = new Texture(Gdx.files.internal("bala.png"));
 		playerBulletTexture = new TextureRegion();
@@ -72,6 +80,7 @@ public class Gfx {
 		superJumpAbilityAnim = new Animation(0.2f, pickupsSheet.get(6));
 		incStaminaPickupAnim = new Animation(0.2f, pickupsSheet.get(7));
 		biModPickupAnim = new Animation(0.2f, pickupsSheet.get(8));
+		incGaugeAnim = new Animation(0.2f, pickupsSheet.get(9));
 
 		menuTexture = new Texture(Gdx.files.internal("menu.png"));
 		splashTexture = new Texture(Gdx.files.internal("splash.png"));

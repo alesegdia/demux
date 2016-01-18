@@ -47,6 +47,7 @@ import com.alesegdia.demux.systems.PickupSystem;
 import com.alesegdia.demux.systems.ShootingSystem;
 import com.alesegdia.demux.systems.SineMovementSystem;
 import com.alesegdia.demux.systems.UpdatePhysicsSystem;
+import com.alesegdia.troidgen.restriction.RestrictionSet;
 import com.alesegdia.troidgen.room.Direction;
 import com.alesegdia.troidgen.room.Link;
 import com.alesegdia.troidgen.room.LinkInfo;
@@ -101,6 +102,7 @@ public class GameWorld {
 		engine.addSystem(new AnimationSystem());
 		engine.addSystem(new DashingSystem());
 		engine.addSystem(new MovementSystem());
+
 
 		// TODO: ver por que no funciona el sine, ver orden en asroth
 		
@@ -283,6 +285,16 @@ public class GameWorld {
 		return slime;
 	}
 	
+	public boolean lvl1Opened()
+	{
+		UpgradesComponent uc = (UpgradesComponent) player.getComponent(UpgradesComponent.class);
+		if( uc == null )
+		{
+			return false;
+		}
+		return uc.hasDash && uc.hasSJump;
+	}
+	
 	public void makeEntrance(Link l)
 	{
 		Entity entrance = new Entity();
@@ -294,9 +306,18 @@ public class GameWorld {
 		GraphicsComponent gc = (GraphicsComponent) entrance.addComponent(new GraphicsComponent());
 		gc.drawElement = Gfx.entranceSheet.get(0);
 		gc.sprite = new Sprite(gc.drawElement);
-		
+
 		AnimationComponent ac = (AnimationComponent) entrance.addComponent(new AnimationComponent());
-		ac.currentAnim = Gfx.entranceAnims[DirectionUtils.GetIndexForDirection(l.direction)];
+
+		if( l.connectedRoom.rinfo.restriction.equals(new RestrictionSet(4, true, false, false, false)) && !lvl1Opened() )
+		{
+			ac.currentAnim = Gfx.entranceAnims[DirectionUtils.GetIndexForDirection(l.direction)];
+		}
+		else
+		{	
+			ac.currentAnim = Gfx.entranceOpenedAnims[DirectionUtils.GetIndexForDirection(l.direction)];
+		}
+		
 		
 		RoomLinkComponent rlc = (RoomLinkComponent) entrance.addComponent(new RoomLinkComponent());
 		rlc.link = l;
@@ -310,7 +331,7 @@ public class GameWorld {
 		pos.x *= GameConfig.METERS_TO_PIXELS / 2f;
 		pos.y *= GameConfig.METERS_TO_PIXELS / 2f;
 		
-		phc.body = physics.createLinkBody(pos.x, pos.y);
+		phc.body = physics.createLinkBody(pos.x, pos.y, l.direction);
 		phc.body.setUserData(entrance);
 		
 		switch(l.direction)
@@ -395,7 +416,6 @@ public class GameWorld {
 		CountdownDestructionComponent cdc = (CountdownDestructionComponent) e.addComponent(new CountdownDestructionComponent());
 		cdc.timeToLive = destructionTime;
 		
-		engine.addEntity(e);
 		
 		return e;
 	}
@@ -457,7 +477,7 @@ public class GameWorld {
 		case INC_GAUGE:
 			gc.drawElement = Gfx.pickupsSheet.get(0);
 			gc.sprite = new Sprite(gc.drawElement);
-			ac.currentAnim = Gfx.healPickupAnim;
+			ac.currentAnim = Gfx.incGaugeAnim;
 			break;
 		case SINE_MOD:
 			gc.drawElement = Gfx.pickupsSheet.get(0);
@@ -474,7 +494,7 @@ public class GameWorld {
 		Entity e = makeBullet(x, y, w, h, new Vector2(speed * (flipX ? -1 : 1), 0), player, tr, dt, power, trespassingEnabled);
 		return e;
 	}
-
+	
 	public void setCam() {
 		cam.position.x = playerPositionComponent.position.x;
 		cam.position.y = playerPositionComponent.position.y;
@@ -508,7 +528,9 @@ public class GameWorld {
 			{
 				makeEntrance(l);
 			}
-			else
+
+			UpgradesComponent uc = (UpgradesComponent) player.getComponent(UpgradesComponent.class);
+			if( !l.isConnected() || (l.connectedRoom.rinfo.restriction.equals(new RestrictionSet(4, true, false, false, false)) && !uc.hasDash && !uc.hasSJump) )
 			{
 				makeBlockEntrance(l);
 			}
