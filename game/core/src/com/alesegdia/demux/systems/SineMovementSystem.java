@@ -25,9 +25,11 @@ public class SineMovementSystem extends EntitySystem {
 		PhysicsComponent phc = (PhysicsComponent) e.getComponent(PhysicsComponent.class);
 		TransformComponent tc = (TransformComponent) e.getComponent(TransformComponent.class);
 		smc.timer += Gdx.graphics.getDeltaTime();
-		float sine = (float) (2f * Math.sin(smc.timer*15));
+		float sine = (float) (1f * Math.sin(smc.timer*40f));
 		float finalY = smc.baseY + sine;
 		phc.body.setTransform(tc.position.x, finalY, 0);
+		
+		System.out.println("executing");
 	}
 
 	
