@@ -93,7 +93,7 @@ public class MapGameplayScreen implements Screen {
 		
 		for( PickupEntry pe : g.restartScreen.pickupMap.get(currentRoom) )
 		{
-			if( !pe.collected )
+			if( pe.pickupType != null && !pe.collected )
 			{
 				gw.makePickup(pe);
 			}
@@ -185,10 +185,12 @@ public class MapGameplayScreen implements Screen {
 		g.textCam.update();
 		g.batch.setProjectionMatrix(g.textCam.combined);
 		g.batch.begin();
+
 		GaugeComponent gac = (GaugeComponent) gw.getPlayer().getComponent(GaugeComponent.class);
 		StaminaComponent stc = (StaminaComponent) gw.getPlayer().getComponent(StaminaComponent.class);
-		g.font.draw(g.batch, gac.gauge() + " " + stc.stamina(), 0, 20);
-		
+
+		g.font.draw(g.batch, gac.gauge(), 50, 30);
+		g.font.draw(g.batch, stc.stamina(), 690, 30);		
 		
 		gw.notificationTTL -= Gdx.graphics.getDeltaTime();
 		if( gw.notificationTTL > 0 )
@@ -196,6 +198,12 @@ public class MapGameplayScreen implements Screen {
 			g.font.draw(g.batch, gw.notification, 10, 580);
 		}
 		
+		g.batch.end();
+		
+		g.batch.setProjectionMatrix(g.menuCam.combined);
+		g.batch.begin();
+		g.batch.draw(Gfx.pickupsSheet.get(9), 1, 1);
+		g.batch.draw(Gfx.pickupsSheet.get(7), 160, 1);
 		g.batch.end();
 
 	}
