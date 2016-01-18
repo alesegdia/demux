@@ -55,18 +55,19 @@ public class MapPickupCollector {
 		return new Vector2(object.getEllipse().x / ppt, object.getEllipse().y / ppt);
 	}
 
-	public static Hashtable<Room, List<PickupEntry>> buildRoomPickupHash(List<Room> result) {
+	public static Hashtable<Room, List<PickupEntry>> buildRoomPickupHash(List<Room> result, List<PickupEntry> all_lpes) {
 		Hashtable<Room, List<PickupEntry>> pickupMap = new Hashtable<Room, List<PickupEntry>>();
-		
+
 		for( Room r : result )
 		{
 			List<PickupEntry> lpes = new LinkedList<PickupEntry>();
 			PickupLocations pls = collect(Tmx.GetMap(r.rinfo.id).tilemap, GameConfig.METERS_TO_PIXELS);
 			for( Vector2 p : pls.abilityPickups )
 			{
-				lpes.add(new PickupEntry(p, PickupType.MakeRandom()));
+				lpes.add(new PickupEntry(p, null));//PickupType.MakeRandom()));
 			}
 			pickupMap.put(r, lpes);
+			all_lpes.addAll(lpes);
 		}
 		
 		return pickupMap;
