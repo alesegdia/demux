@@ -530,7 +530,7 @@ public class GameWorld {
 			}
 
 			UpgradesComponent uc = (UpgradesComponent) player.getComponent(UpgradesComponent.class);
-			if( !l.isConnected() || (l.connectedRoom.rinfo.restriction.equals(new RestrictionSet(4, true, false, false, false)) && !uc.hasDash && !uc.hasSJump) )
+			if( !l.isConnected() || (l.connectedRoom.rinfo.restriction.equals(new RestrictionSet(4, true, false, false, false)) && (!uc.hasDash || !uc.hasSJump)) )
 			{
 				makeBlockEntrance(l);
 			}
