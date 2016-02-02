@@ -1,3 +1,3 @@
 # demux
 
-Procedurally generated platformer with manually created rooms.
+Check the devlog at [my blog](http://alesegdia.github.io/blog).
