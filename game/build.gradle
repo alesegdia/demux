@@ -28,6 +28,10 @@ allprojects {
     }
 }
 
+project(":troidgen") {
+
+}
+
 project(":desktop") {
     apply plugin: "java"
 
@@ -49,6 +53,7 @@ project(":core") {
 
 
     dependencies {
+	compile project(":troidgen")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"

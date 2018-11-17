@@ -18,7 +18,7 @@ public class Tmx {
 	public static void Initialize()
 	{
 		mapHash = new Hashtable<String, TilemapWrapper>();
-		FileHandle dirHandle = Gdx.files.internal("./bin/maps/");
+		FileHandle dirHandle = Gdx.files.internal("./maps/");
 		for( FileHandle entry : dirHandle.list() )
 		{
 			String ext = entry.extension();
