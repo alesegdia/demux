@@ -72,7 +72,7 @@ public class ShootingSystem extends EntitySystem {
 					b.name = "lebala";
 				}
 				if( bm.sinegun ) {
-					System.out.println("SINEGUN!");
+					//System.out.println("SINEGUN!");
 					SineMovementComponent smc = (SineMovementComponent) b.addComponent(new SineMovementComponent());
 					smc.baseY = pc.position.y + be.origin.y;
 				}
